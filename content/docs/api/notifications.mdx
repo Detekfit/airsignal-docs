@@ -7,7 +7,7 @@ Routes on this page use `Authorization: Key nsk_...` — see [Authentication](/d
 
 ## Send a notification
 
-`POST /v1/notifications`
+<Endpoint method="POST" path="/v1/notifications" />
 
 Target with **one** of `includeSubscriberIds`, `includeExternalIds`, or `includedSegments`.
 
@@ -41,12 +41,16 @@ An optional `Idempotency-Key` header prevents duplicate sends on retry.
 
 ## Check status
 
-`GET /v1/notifications/{id}` returns status (`scheduled` | `queued` | ...) plus delivery counters:
-audience, sent, delivered, failed, unsubscribed, remaining, capped, clicks, CTR.
+<Endpoint method="GET" path="/v1/notifications/{id}" />
+
+Returns status (`scheduled` | `queued` | ...) plus delivery counters: audience, sent, delivered,
+failed, unsubscribed, remaining, capped, clicks, CTR.
 
 ## Report engagement (SDK side)
 
-`POST /v1/notifications/{notificationId}/events` — header `X-AirSignal-App-Id` only.
+<Endpoint method="POST" path="/v1/notifications/{notificationId}/events" />
+
+Header `X-AirSignal-App-Id` only.
 
 ```request.json
 { "type": "clicked", "subscriberId": "<uuid>", "subscriptionId": "<device-uuid>", "platform": "android" }

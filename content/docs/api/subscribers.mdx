@@ -7,7 +7,7 @@ All routes on this page use `X-AirSignal-App-Id: app_...` — no REST key.
 
 ## Upsert subscriber
 
-`POST /v1/subscribers`
+<Endpoint method="POST" path="/v1/subscribers" />
 
 ```request.json
 {
@@ -36,7 +36,7 @@ existing device by `pushToken` → create new. Upsert does **not** switch a devi
 
 ## Login
 
-`POST /v1/subscribers/login`
+<Endpoint method="POST" path="/v1/subscribers/login" />
 
 Attaches this device to the subscriber identified by `externalId`, creating the account if it
 doesn't exist yet.
@@ -50,7 +50,7 @@ doesn't exist yet.
 
 ## Logout
 
-`POST /v1/subscribers/logout`
+<Endpoint method="POST" path="/v1/subscribers/logout" />
 
 Moves this device to a new anonymous subscriber. The identified account is kept even with zero
 devices left. Does not soft-unsubscribe.
@@ -61,22 +61,25 @@ devices left. Does not soft-unsubscribe.
 
 ## Heartbeat
 
-`POST /v1/subscribers/{subscriberId}/heartbeat` — updates `lastOnlineAt`. Call periodically or on
-foreground.
+<Endpoint method="POST" path="/v1/subscribers/{subscriberId}/heartbeat" />
+
+Updates `lastOnlineAt`. Call periodically or on foreground.
 
 ## Tags
 
-`PUT /v1/subscribers/{subscriberId}/tags`
+<Endpoint method="PUT" path="/v1/subscribers/{subscriberId}/tags" />
 
 ```request.json
 { "tags": { "plan": "pro", "cohort": "beta" } }
 ```
 
-`DELETE /v1/subscribers/{subscriberId}/tags` with `{ "keys": ["plan"] }`.
+<Endpoint method="DELETE" path="/v1/subscribers/{subscriberId}/tags" />
+
+Body: `{ "keys": ["plan"] }`.
 
 ## Aliases
 
-`PUT /v1/subscribers/{subscriberId}/aliases`
+<Endpoint method="PUT" path="/v1/subscribers/{subscriberId}/aliases" />
 
 ```request.json
 { "aliases": { "facebookId": "102938" } }
@@ -84,8 +87,9 @@ foreground.
 
 ## Unsubscribe
 
-`POST /v1/subscribers/{subscriberId}/unsubscribe` — soft opt-out. Add `?pushOnly=true` to leave
-the email channel untouched.
+<Endpoint method="POST" path="/v1/subscribers/{subscriberId}/unsubscribe" />
+
+Soft opt-out. Add `?pushOnly=true` to leave the email channel untouched.
 
 <Callout type="info">
   There is no public hard-delete route. Hard delete is available only from an authenticated
