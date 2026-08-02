@@ -15,34 +15,34 @@ Creates and dispatches (or schedules) a push notification for the project bound 
 
 ### Headers
 
-| Header | Type | | Description |
+| Header | Type | Required | Description |
 |---|---|---|---|
-| `Authorization` | string | <Required /> | `Key nsk_...` (or Basic `base64(appId:nsk_...)`) |
-| `Content-Type` | string | <Required /> | Must be `application/json` |
-| `Idempotency-Key` | string | <Optional /> | Stable key (max 128 chars). Retries with the same key return the original notification instead of sending again |
+| `Authorization` | string | **Required** | `Key nsk_...` (or Basic `base64(appId:nsk_...)`) |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+| `Idempotency-Key` | string | Optional | Stable key (max 128 chars). Retries with the same key return the original notification instead of sending again |
 
 ### Body parameters
 
-| Parameter | Type | | Description |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `priority` | string | <Required /> | FCM priority. One of `normal` \| `high` |
-| `includeSubscriberIds` | string[] | <Optional />* | AirSignal subscriber UUIDs (max **10 000**). Exactly **one** audience field must be non-empty on send |
-| `includeExternalIds` | string[] | <Optional />* | Your app’s external user ids (max **10 000**, each 1–255 chars) |
-| `includedSegments` | string[] | <Optional />* | Segment names. Use `["All"]` for a queued broadcast to every subscribed push device |
-| `headings` | object | <Optional />† | Localized titles — map of locale → string (max 500 chars each, ≤ 50 locales). Prefer `en` |
-| `contents` | object | <Optional />† | Localized body text — map of locale → string (max 2000 chars each, ≤ 50 locales) |
-| `name` | string | <Optional /> | Internal message name (dashboard / reporting). Max 255 chars |
-| `status` | string | <Optional /> | `send` (default) queues/dispatches; `draft` stores only (no FCM) |
-| `data` | object | <Optional /> | Custom FCM data payload (≤ 50 keys, ≤ 8 KB JSON). Avoid reserved AirSignal keys |
-| `imageUrl` | string | <Optional /> | Public `http(s)` image URL for big-picture style (max 2048 chars) |
-| `launchUrl` | string | <Optional /> | URL / deep link opened on notification click (max 2048 chars) |
-| `collapseId` | string | <Optional /> | FCM Android collapse key (1–128 chars) |
-| `ttl` | object | <Optional /> | Time-to-live: `{ "value": number, "unit": "seconds" \| "minutes" \| "hours" \| "days" }`. `value` is a positive int ≤ **2 419 200** (seconds equivalent) |
-| `androidButtons` | object[] | <Optional /> | Up to **3** action buttons. Each: `id` <Required />, `label` <Required />, `icon` <Optional /> (string lengths ≤ 64 / 64 / 128) |
-| `sendAfter` | string | <Optional /> | Future ISO-8601 datetime **with offset** (e.g. `2026-07-28T12:00:00.000Z`). Sets status to `scheduled` |
-| `channel` | string | <Optional /> | `push` (default) \| `email` (reserved) |
-| `deliveryMode` | string | <Optional /> | `sameTime` (default) — one UTC instant; `perTimezone` — local wall clock per device |
-| `localDeliveryTime` | string | Conditional | Required when `deliveryMode` is `perTimezone`. Format `HH:mm` (24h), e.g. `09:30` |
+| `priority` | string | **Required** | FCM priority. One of `normal` \| `high` |
+| `includeSubscriberIds` | string[] | One of\* | AirSignal subscriber UUIDs (max **10 000**) |
+| `includeExternalIds` | string[] | One of\* | Your app’s external user ids (max **10 000**, each 1–255 chars) |
+| `includedSegments` | string[] | One of\* | Segment names. Use `["All"]` for a queued broadcast to every subscribed push device |
+| `headings` | object | One of† | Localized titles — map of locale → string (max 500 chars each, ≤ 50 locales). Prefer `en` |
+| `contents` | object | One of† | Localized body text — map of locale → string (max 2000 chars each, ≤ 50 locales) |
+| `name` | string | Optional | Internal message name (dashboard / reporting). Max 255 chars |
+| `status` | string | Optional | `send` (default) queues/dispatches; `draft` stores only (no FCM) |
+| `data` | object | Optional | Custom FCM data payload (≤ 50 keys, ≤ 8 KB JSON). Avoid reserved AirSignal keys |
+| `imageUrl` | string | Optional | Public `http(s)` image URL for big-picture style (max 2048 chars) |
+| `launchUrl` | string | Optional | URL / deep link opened on notification click (max 2048 chars) |
+| `collapseId` | string | Optional | FCM Android collapse key (1–128 chars) |
+| `ttl` | object | Optional | Time-to-live: `{ "value": number, "unit": "seconds" \| "minutes" \| "hours" \| "days" }`. `value` is a positive int ≤ **2 419 200** (seconds equivalent) |
+| `androidButtons` | object[] | Optional | Up to **3** action buttons. Each object: `id` (**required**), `label` (**required**), `icon` (optional) — string lengths ≤ 64 / 64 / 128 |
+| `sendAfter` | string | Optional | Future ISO-8601 datetime **with offset** (e.g. `2026-07-28T12:00:00.000Z`). Sets status to `scheduled` |
+| `channel` | string | Optional | `push` (default) \| `email` (reserved) |
+| `deliveryMode` | string | Optional | `sameTime` (default) — one UTC instant; `perTimezone` — local wall clock per device |
+| `localDeliveryTime` | string | Conditional | **Required** when `deliveryMode` is `perTimezone`. Format `HH:mm` (24h), e.g. `09:30` |
 
 \* On `status: "send"` (the default), provide **at least one** of `includeSubscriberIds`, `includeExternalIds`, or `includedSegments`.
 
@@ -192,15 +192,15 @@ Small targeted audiences may finish synchronously and return `status: "completed
 
 ### Headers
 
-| Header | Type | | Description |
+| Header | Type | Required | Description |
 |---|---|---|---|
-| `Authorization` | string | <Required /> | `Key nsk_...` |
+| `Authorization` | string | **Required** | `Key nsk_...` |
 
 ### Path parameters
 
-| Parameter | Type | | Description |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `id` | uuid | <Required /> | Notification id returned from `POST /v1/notifications` |
+| `id` | uuid | **Required** | Notification id returned from `POST /v1/notifications` |
 
 ### Example response
 
@@ -243,20 +243,20 @@ Uses collect auth only — `X-AirSignal-App-Id`. The Flutter / mobile SDK calls 
 
 ### Headers
 
-| Header | Type | | Description |
+| Header | Type | Required | Description |
 |---|---|---|---|
-| `X-AirSignal-App-Id` | string | <Required /> | Public `app_...` id |
-| `Content-Type` | string | <Required /> | `application/json` |
+| `X-AirSignal-App-Id` | string | **Required** | Public `app_...` id |
+| `Content-Type` | string | **Required** | `application/json` |
 
 ### Body parameters
 
-| Parameter | Type | | Description |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `type` | string | <Required /> | `clicked` \| `buttonClicked` (`received` is rejected) |
-| `platform` | string | <Optional /> | `android` (default) \| `ios` \| `web` \| `email` |
-| `subscriberId` | uuid | <Optional /> | Subscriber that clicked |
-| `subscriptionId` | uuid | <Optional /> | Device / push subscription UUID for attribution |
-| `buttonId` | string | <Optional /> | Required in practice for `buttonClicked` (1–64 chars); matches `androidButtons[].id` |
+| `type` | string | **Required** | `clicked` \| `buttonClicked` (`received` is rejected) |
+| `platform` | string | Optional | `android` (default) \| `ios` \| `web` \| `email` |
+| `subscriberId` | uuid | Optional | Subscriber that clicked |
+| `subscriptionId` | uuid | Optional | Device / push subscription UUID for attribution |
+| `buttonId` | string | Optional | For `buttonClicked` (1–64 chars); matches `androidButtons[].id` |
 
 ```request.json
 {
