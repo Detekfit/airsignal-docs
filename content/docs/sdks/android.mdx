@@ -1,0 +1,29 @@
+---
+title: Android SDK
+description: Native Android SDK for AirSignal push — coming soon.
+sidebarTitle: Android
+badge: Soon
+---
+
+<Callout type="info">
+  The native Android SDK is on the roadmap. Until it ships, use the same collect API contracts
+  documented in [API Reference](/docs/api) — or the [Flutter SDK](/docs/sdks/flutter) if your app
+  is Flutter-based.
+</Callout>
+
+## Planned coverage
+
+When this guide is ready it will be a single start-to-end page covering:
+
+1. Installation (Gradle)
+2. Initialization (`appId`)
+3. Identity (login / logout / `externalId`)
+4. Push permissions, receive, and engagement
+
+## Today
+
+- Collect routes are already platform-agnostic (`device.platform: "android"`)
+- Push transport remains FCM via your uploaded
+  [Google service account](/docs/guides/service-account)
+- Flutter apps should use [Flutter SDK](/docs/sdks/flutter) instead of adding
+  `firebase_messaging` themselves

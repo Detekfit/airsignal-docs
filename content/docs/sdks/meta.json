@@ -1,4 +1,4 @@
 {
   "title": "SDKs",
-  "pages": ["index", "flutter"]
+  "pages": ["index", "flutter", "ios", "android"]
 }

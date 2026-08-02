@@ -73,6 +73,26 @@ Prefer **one start-to-end guide** per SDK (`sdks/{name}.mdx`) with `##` sections
 Initialization, Identity, Push, etc. Add the filename to `sdks/meta.json`. Only split into a folder
 if the SDK truly needs multiple independent pages.
 
+### Coming soon (`badge`)
+
+For SDKs that are not ready yet:
+
+```mdx
+---
+title: iOS SDK
+sidebarTitle: iOS
+badge: Soon
+description: Native iOS SDK — coming soon.
+---
+```
+
+- Sidebar shows a **Soon** badge and the item is not clickable
+- Hub `<Card badge="Soon">` is also non-clickable (omit `href` or keep it — Soon wins)
+- Soon pages are omitted from the public sitemap
+- When the SDK ships: remove `badge`, fill the guide, and add `href` on hub cards
+
+`badge` can be any short label later (e.g. `Beta`) — the UI renders the string as-is.
+
 ## `meta.json` reference
 
 ```json
