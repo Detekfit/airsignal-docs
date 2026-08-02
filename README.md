@@ -16,7 +16,7 @@ content/
     guides/
     api/
     sdks/
-      flutter/
+      flutter.mdx         # full Flutter SDK guide (single page)
   legal/                  # marketing legal pages → /terms /privacy /refunds
     meta.json
     terms.mdx             # → /terms
@@ -67,10 +67,11 @@ Do **not** put a top-level `# Title` in the body — the marketing layout render
 frontmatter. Keep headings at `##` and below. If you add a new legal slug, also add a matching
 route in `apps/web` (`/terms`-style marketing page).
 
-## Adding a new SDK section
+## Adding a new SDK
 
-Copy the `sdks/flutter/` folder pattern (own `meta.json` + `index.mdx` + topic pages), then add the
-folder name to `sdks/meta.json`.
+Prefer **one start-to-end guide** per SDK (`sdks/{name}.mdx`) with `##` sections for Installation,
+Initialization, Identity, Push, etc. Add the filename to `sdks/meta.json`. Only split into a folder
+if the SDK truly needs multiple independent pages.
 
 ## `meta.json` reference
 

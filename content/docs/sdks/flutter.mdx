@@ -1,0 +1,173 @@
+---
+title: Flutter SDK
+description: Add AirSignal push notifications to a Flutter app with one package — install, initialize, identify users, and handle push.
+sidebarTitle: Flutter
+---
+
+The `airsignal_flutter` package is the single dependency your Flutter app needs for push. It owns
+push receive internally, so you do **not** add `firebase_messaging` or ship
+`google-services.json` yourself.
+
+<Callout type="warning">
+  Requires a Google service account uploaded on your app — see
+  [Get a Google service account JSON](/docs/guides/service-account).
+</Callout>
+
+## Installation
+
+<Steps>
+  <Step title="Add the dependency">
+    ```bash
+    flutter pub add airsignal_flutter
+    ```
+  </Step>
+  <Step title="Android setup">
+    No manual Firebase setup is required — the package bundles what it needs to receive push via
+    FCM. Make sure your app's Android `applicationId` matches the Android app registered in the
+    Firebase project used for your [service account](/docs/guides/service-account).
+  </Step>
+  <Step title="iOS / Web">
+    <Callout type="warning">
+      iOS and Web are on the platform roadmap. The collect API contract is already stable for
+      them — see [API Reference](/docs/api).
+    </Callout>
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Do not add `firebase_messaging` yourself. Push receive and token refresh live inside
+  `airsignal_flutter` — a second messaging plugin will conflict with it.
+</Callout>
+
+## Initialization
+
+```dart
+import 'package:airsignal_flutter/airsignal_flutter.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await AirSignal.init(appId: 'app_...');
+
+  runApp(const MyApp());
+}
+```
+
+`AirSignal.init` connects to the production API (`api.airsignal.dev`), requests the push client
+config for your app, obtains an FCM token, and registers a subscriber automatically.
+
+### Local / staging override
+
+```dart
+await AirSignal.init(
+  appId: 'app_...',
+  apiBaseUrl: 'https://staging.api.airsignal.dev',
+);
+```
+
+Only set `apiBaseUrl` for local development or a staging environment — production apps should use
+the default.
+
+### Reading the subscriber id
+
+```dart
+final subscriberId = AirSignal.instance.subscriberId;
+```
+
+Persist this alongside your own user record if you plan to target sends by `subscriberId` from
+your backend. See [Subscribers](/docs/api/subscribers) for the full identity model.
+
+## Identity
+
+A newly initialized device starts **anonymous**. Call `login` once you know who the user is (for
+example, right after your own app's sign-in completes).
+
+### Login
+
+```dart
+await AirSignal.instance.login(externalId: 'user_123');
+```
+
+This attaches the current device's push subscription to the subscriber identified by
+`externalId`, creating the account if it doesn't exist yet. Multiple devices can share the same
+`externalId` after each logs in.
+
+### Logout
+
+```dart
+await AirSignal.instance.logout();
+```
+
+Moves the device to a brand-new anonymous subscriber. The identified account is kept even if it
+now has zero devices — logout does not delete data or opt the user out of push.
+
+<Callout type="warning">
+  `login` / `logout` change **which account this device belongs to**. To stop sending push to a
+  user entirely, use opt-out under [Push & engagement](#push--engagement).
+</Callout>
+
+### Tags and aliases
+
+```dart
+await AirSignal.instance.setTags({'plan': 'pro', 'cohort': 'beta'});
+await AirSignal.instance.setAliases({'facebookId': '102938'});
+```
+
+Use tags and aliases for segmentation and cross-system linking — see
+[Subscribers](/docs/api/subscribers) for server-side equivalents.
+
+## Push & engagement
+
+### Requesting permission
+
+```dart
+final granted = await AirSignal.instance.requestPushPermission();
+```
+
+Call this at a sensible point in your onboarding flow — the SDK reports the resulting
+`pushEnabled` state automatically on the next sync.
+
+### Receiving notifications
+
+The SDK registers foreground and background handlers internally. To react to a notification while
+your app is open:
+
+```dart
+AirSignal.instance.onNotificationReceived.listen((notification) {
+  // e.g. show an in-app banner
+});
+```
+
+### Handling taps / launch URLs
+
+```dart
+AirSignal.instance.onNotificationOpened.listen((notification) {
+  final launchUrl = notification.launchUrl;
+  if (launchUrl != null) {
+    // navigate within your app
+  }
+});
+```
+
+Opening a notification automatically reports a `clicked` engagement event — you don't need to call
+the events API yourself from Flutter.
+
+### Action buttons
+
+If a send included `androidButtons`, button taps are reported the same way as a regular click,
+with the tapped `buttonId` attached. See [Notifications](/docs/api/notifications) for the send-side
+payload shape.
+
+<Callout type="info">
+  Dashboard **Delivered** counts come from FCM accept confirmation, not from the SDK. The SDK only
+  ever reports clicks, not delivery or receipt.
+</Callout>
+
+### Opting out
+
+```dart
+await AirSignal.instance.optOut(pushOnly: true);
+```
+
+Soft-unsubscribes the current device from push. Pass `pushOnly: false` (or omit it) to also opt
+the subscriber out of other channels like email.
