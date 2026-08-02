@@ -1,50 +1,40 @@
 # airsignal-docs
 
-Source content for [airsignal.dev/docs](https://airsignal.dev/docs). This repo is public and read
-directly by the AirSignal web app (`apps/web`) over the GitHub API — pushing to `main` updates the
-live site within ~2 minutes (ISR), no deploy required.
+Source content for [airsignal.dev/docs](https://airsignal.dev/docs) and marketing legal pages
+(`/terms`, `/privacy`, `/refunds`). This repo is public and read directly by the AirSignal web app
+(`apps/web`) over the GitHub API — pushing to `main` updates the live site within ~2 minutes (ISR),
+no deploy required.
 
 ## Structure
 
 ```text
-content/docs/
-  meta.json           # root nav order + section dividers
-  index.mdx           # /docs
-  getting-started/
-    meta.json
-    index.mdx         # /docs/getting-started
-    quickstart.mdx
-    concepts.mdx
-  guides/
+content/
+  docs/                   # product documentation → /docs/*
     meta.json
     index.mdx
-    create-an-app.mdx
-    api-keys.mdx
-    service-account.mdx   # how to get a Google service account JSON
-  api/
+    getting-started/
+    guides/
+    api/
+    sdks/
+      flutter/
+  legal/                  # marketing legal pages → /terms /privacy /refunds
     meta.json
-    index.mdx
-    authentication.mdx
-    subscribers.mdx
-    notifications.mdx
-  sdks/
-    meta.json
-    index.mdx
-    flutter/               # nested section — one folder per SDK
-      meta.json
-      index.mdx
-      installation.mdx
-      initialization.mdx
-      identity.mdx
-      push.mdx
+    terms.mdx             # → /terms
+    privacy.mdx           # → /privacy
+    refunds.mdx           # → /refunds
+assets/                   # images; referenced via raw.githubusercontent URLs
 ```
 
 ## URL mapping
 
-`content/docs/{path}` → `https://airsignal.dev/docs/{path}`. An `index.mdx` inside a folder maps
-to the folder's own URL (e.g. `getting-started/index.mdx` → `/docs/getting-started`).
+| Content path | Public URL |
+|---|---|
+| `content/docs/{path}` | `/docs/{path}` (`index.mdx` maps to the folder URL) |
+| `content/legal/terms.mdx` | `/terms` |
+| `content/legal/privacy.mdx` | `/privacy` |
+| `content/legal/refunds.mdx` | `/refunds` |
 
-## Adding a page
+## Adding a docs page
 
 1. Create the `.mdx` file with frontmatter:
 
@@ -60,6 +50,22 @@ to the folder's own URL (e.g. `getting-started/index.mdx` → `/docs/getting-sta
 2. Add the filename (without extension) to the parent folder's `meta.json` `pages` array. Pages
    not listed in `meta.json` still render but won't appear in the sidebar.
 3. Commit and push to `main`.
+
+## Editing legal pages
+
+Edit `content/legal/{terms|privacy|refunds}.mdx`. Frontmatter fields:
+
+```mdx
+---
+title: Terms of Service
+description: Short SEO description.
+lastUpdated: August 1, 2026
+---
+```
+
+Do **not** put a top-level `# Title` in the body — the marketing layout renders `title` from
+frontmatter. Keep headings at `##` and below. If you add a new legal slug, also add a matching
+route in `apps/web` (`/terms`-style marketing page).
 
 ## Adding a new SDK section
 
@@ -79,13 +85,16 @@ folder name to `sdks/meta.json`.
 - `"---Label---"` entries render as non-clickable section dividers.
 - Entries can be `.mdx` filenames (no extension) or sub-folder names.
 
-## Available MDX components
+## Available MDX components (docs)
 
 - `<Callout type="info|warning|tip|danger">` — inline notices
 - `<Cards><Card title href icon /></Cards>` — hub-page link grids
 - `<Steps><Step title>...</Step></Steps>` — numbered walkthroughs
 - `<Tabs items={["a","b"]}><Tab>...</Tab></Tabs>` — platform-specific snippets
 - Fenced code blocks get syntax highlighting + a copy button automatically
+
+Legal pages use the same MDX pipeline for prose (headings, links, lists, emphasis). Prefer plain
+markdown there unless a Callout is genuinely useful.
 
 ## Content ownership
 
