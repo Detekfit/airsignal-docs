@@ -1,0 +1,96 @@
+---
+title: Logout
+sidebarTitle: Logout
+method: POST
+description: Move this device to a new anonymous subscriber without opting out of push.
+---
+
+Detaches the device from the identified account and creates a fresh anonymous subscriber for
+this subscription. The identified account is kept even if it has zero devices left. Does **not**
+soft-unsubscribe.
+
+<Endpoint method="POST" path="/v1/subscribers/logout" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X POST 'https://api.airsignal.dev/v1/subscribers/logout' \
+  -H 'Content-Type: application/json' \
+  -H 'X-AirSignal-App-Id: app_...' \
+  -d '{
+    "subscriptionId": "7c2e1a90-1111-2222-3333-abcdefabcdef"
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["201", "400", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriber": {
+    "id": "a0a0a0a0-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "externalId": null,
+    "subscribed": true
+  },
+  "device": {
+    "subscriptionId": "7c2e1a90-1111-2222-3333-abcdefabcdef",
+    "channel": "push",
+    "subscribed": true
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriptionRequired",
+  "message": "subscriptionId, pushToken, or subscriberId with one push subscription required"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriberNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+Provide at least one device locator:
+
+<RequestParam name="subscriptionId" type="UUID">
+  SDK-internal device id to move to a new anonymous subscriber.
+</RequestParam>
+
+<RequestParam name="subscriberId" type="UUID">
+  Existing AirSignal subscriber id, as an alternative locator.
+</RequestParam>
+
+<RequestParam name="pushToken" type="String">
+  Device push token, as an alternative locator.
+</RequestParam>

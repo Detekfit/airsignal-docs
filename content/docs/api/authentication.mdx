@@ -3,12 +3,25 @@ title: Authentication
 description: Two credentials — collect with appId, send with an nsk key. Never mix them.
 ---
 
-AirSignal uses **two separate credentials**, scoped to different routes.
+AirSignal uses **two separate credentials**, each scoped to different routes. Pick the right one
+for the call you are making.
 
-| Credential | Who uses it | Routes | How |
-|---|---|---|---|
-| **App ID** `app_...` | Mobile / web SDK | Collect: config, subscribers, devices, heartbeat, sessions, unsubscribe, engagement | Header `X-AirSignal-App-Id: app_...` **only** |
-| **REST key** `nsk_...` | Your backend / dashboard | **Send only:** `POST` / `GET /v1/notifications` | `Authorization: Key nsk_...` or Basic `base64(appId:nsk_...)` |
+## Credentials
+
+<ApiSection title="Collect (SDK)">
+  <ApiField name="X-AirSignal-App-Id" type="string" required defaultValue="app_YOUR_APP_ID">
+    Public App ID. Used for config, subscribers, subscriptions, heartbeat, sessions,
+    unsubscribe, and engagement. Never send the REST key on these routes.
+  </ApiField>
+</ApiSection>
+
+<ApiSection title="Send (server)">
+  <ApiField name="Authorization" type="string" required defaultValue="Key YOUR_REST_API_KEY">
+    Project REST key with the `Key` prefix (`nsk_…`). Used only for
+    `POST` / `GET /v1/notifications`. See [API keys](/docs/guides/api-keys). HTTP Basic
+    `base64(appId:nsk_…)` is also supported.
+  </ApiField>
+</ApiSection>
 
 ```headers.http
 # SDK collect
@@ -20,14 +33,14 @@ Authorization: Key nsk_...
 
 <Callout type="warning">
   Never ship `nsk_...` inside a mobile or web client release build. Collect routes do not accept
-  the REST key, and send routes do not accept `X-AirSignal-App-Id`.
+  the REST key, and send routes do not accept `X-AirSignal-App-Id` as authorization.
 </Callout>
 
 ## Collect auth errors
 
 All `/v1` collect routes return a nested camelCase error:
 
-```request.json
+```response.json
 { "error": { "code": "appNotFound", "message": "..." } }
 ```
 
@@ -44,7 +57,7 @@ Branch on `error.code` — never parse the message text.
 | Topic | Rule |
 |---|---|
 | JSON casing | camelCase everywhere |
-| Content type | `application/json; charset=utf-8` |
+| Content type | `application/json` |
 | Timezones | IANA strings (e.g. `Asia/Dhaka`) |
 | Platform values | `android` \| `ios` \| `web` (engagement also allows `email`) |
 | Deletes | Public API is soft-unsubscribe only; hard delete is dashboard-only |

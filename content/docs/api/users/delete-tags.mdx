@@ -1,0 +1,74 @@
+---
+title: Delete tags
+sidebarTitle: Delete tags
+method: DELETE
+description: Remove tags from a subscriber.
+---
+
+Remove one or more tag keys from a subscriber.
+
+<Endpoint method="DELETE" path="/v1/subscribers/{subscriberId}/tags" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X DELETE 'https://api.airsignal.dev/v1/subscribers/55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe/tags' \
+  -H 'Content-Type: application/json' \
+  -H 'X-AirSignal-App-Id: app_...' \
+  -d '{
+    "keys": ["plan"]
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["200", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriber": {
+    "id": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+    "tags": [{ "key": "cohort", "value": "beta" }]
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriberNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="subscriberId" type="UUID" required>
+  AirSignal subscriber id (path).
+</RequestParam>
+
+<RequestParam name="keys" type="String[]" required>
+  Tag keys to remove.
+</RequestParam>

@@ -1,0 +1,181 @@
+---
+title: Push notification
+sidebarTitle: Push notification
+method: POST
+description: Send a push notification with the AirSignal REST API.
+---
+
+Create and dispatch a push notification for the project bound to your REST key.
+
+<Endpoint method="POST" path="/v1/notifications" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X POST 'https://api.airsignal.dev/v1/notifications' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Key nsk_...' \
+  -d '{
+    "includeSubscriberIds": ["55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe"],
+    "headings": { "en": "Order shipped" },
+    "contents": { "en": "Your package is on the way." },
+    "priority": "high"
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["201", "400", "401", "402", "429"]}>
+  <Tab>
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "status": "queued",
+  "channel": "push",
+  "targetType": "subscriber_ids",
+  "headings": { "en": "Order shipped" },
+  "contents": { "en": "Your package is on the way." },
+  "priority": "high",
+  "createdVia": "api",
+  "deliveryStatus": {
+    "audience": 1,
+    "sent": 0,
+    "delivered": 0,
+    "failed": 0,
+    "unsubscribed": 0,
+    "remaining": 1,
+    "capped": 0,
+    "clicks": 0,
+    "clickThroughRate": 0,
+    "channel": "push"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "validationError",
+  "issues": [
+    {
+      "code": "invalid_type",
+      "expected": "object",
+      "received": "undefined",
+      "path": [],
+      "message": "Required"
+    }
+  ]
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "invalidApiKey"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "mauLimitExceeded",
+  "code": "MAU_LIMIT_EXCEEDED",
+  "message": "Organization is over its included MAU.",
+  "plan": {
+    "tier": "free",
+    "limit": 1000,
+    "current": 1200,
+    "upgradeRequired": true
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request header
+
+| Header name | Value |
+|---|---|
+| Idempotency-Key | Optional stable retry key |
+
+Auth headers are documented in [Authentication](/docs/api/authentication).
+
+## Request parameter
+
+<RequestParam name="priority" type="String" required>
+  FCM priority. `normal` or `high`.
+</RequestParam>
+
+Audience — provide **exactly one** of `includeSubscriberIds`, `includeExternalIds`, or
+`includedSegments` per request. Do not combine them.
+
+<RequestParam name="includeSubscriberIds" type="String[]" required>
+  Subscriber UUIDs to target (max 10 000). Use alone — not with the other audience fields.
+</RequestParam>
+
+<RequestParam name="includeExternalIds" type="String[]" required>
+  Your external user ids (max 10 000). Use alone — not with the other audience fields.
+</RequestParam>
+
+<RequestParam name="includedSegments" type="String[]" required>
+  Segment names. Use `["All"]` for a broadcast. Use alone — not with the other audience fields.
+</RequestParam>
+
+<RequestParam name="headings" type="Object" required>
+  Localized titles (`en` recommended). Required if `contents` is omitted.
+</RequestParam>
+
+<RequestParam name="contents" type="Object" required>
+  Localized body text. Required if `headings` is omitted.
+</RequestParam>
+
+<RequestParam name="name" type="String">
+  Internal label for organizing messages. Not shown to recipients. Max 255 chars.
+</RequestParam>
+
+<RequestParam name="data" type="Object">
+  Custom FCM data payload (max 50 keys, 8 KB).
+</RequestParam>
+
+<RequestParam name="imageUrl" type="String">
+  Public `http(s)` image URL for big-picture style.
+</RequestParam>
+
+<RequestParam name="launchUrl" type="String">
+  Deep link / URL opened on notification tap.
+</RequestParam>
+
+<RequestParam name="collapseId" type="String">
+  Android FCM collapse key (1–128 chars).
+</RequestParam>
+
+<RequestParam name="ttl" type="Object">
+  `{ "value": number, "unit": "seconds" \| "minutes" \| "hours" \| "days" }`.
+</RequestParam>
+
+<RequestParam name="androidButtons" type="Object[]">
+  Up to 3 buttons: `id`, `label` required; `icon` optional.
+</RequestParam>
+
+<RequestParam name="sendAfter" type="String">
+  Future ISO-8601 time with offset. Schedules the send.
+</RequestParam>
+
+<RequestParam name="deliveryMode" type="String">
+  `sameTime` (default) or `perTimezone`.
+</RequestParam>
+
+<RequestParam name="localDeliveryTime" type="String">
+  `HH:mm` when `deliveryMode` is `perTimezone`.
+</RequestParam>

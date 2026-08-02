@@ -1,0 +1,72 @@
+---
+title: Unsubscribe
+sidebarTitle: Unsubscribe
+method: POST
+description: Soft opt-out a subscriber from push (and optionally leave email untouched).
+---
+
+Soft-unsubscribes the user. There is **no** public hard-delete route — hard delete is
+dashboard-only.
+
+<Endpoint method="POST" path="/v1/subscribers/{subscriberId}/unsubscribe" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X POST 'https://api.airsignal.dev/v1/subscribers/55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe/unsubscribe?pushOnly=true' \
+  -H 'X-AirSignal-App-Id: app_...'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["201", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriber": {
+    "id": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+    "subscribed": false
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriberNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="subscriberId" type="UUID" required>
+  AirSignal subscriber id (path).
+</RequestParam>
+
+<RequestParam name="pushOnly" type="Boolean">
+  Query flag. When `true`, only the push channel is opted out; email subscription state is left
+  unchanged.
+</RequestParam>

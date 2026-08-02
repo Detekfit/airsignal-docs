@@ -1,0 +1,123 @@
+---
+title: Upsert subscription
+sidebarTitle: Upsert subscription
+method: POST
+description: Create or update a push subscription (preferred over deprecated /v1/devices).
+---
+
+Attach or refresh a push token on a subscriber. `pushToken` is required (aliases `token` and
+legacy `fcmToken` are also accepted).
+
+<Endpoint method="POST" path="/v1/subscriptions" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X POST 'https://api.airsignal.dev/v1/subscriptions' \
+  -H 'Content-Type: application/json' \
+  -H 'X-AirSignal-App-Id: app_...' \
+  -d '{
+    "subscriberId": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+    "subscriptionId": "7c2e1a90-1111-2222-3333-abcdefabcdef",
+    "pushToken": "<push-token>",
+    "pushEnabled": true,
+    "device": {
+      "platform": "android",
+      "model": "Pixel 8",
+      "timezone": "Asia/Dhaka"
+    }
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["201", "400", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriberId": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+  "subscriptionId": "7c2e1a90-1111-2222-3333-abcdefabcdef",
+  "device": {
+    "subscriptionId": "7c2e1a90-1111-2222-3333-abcdefabcdef",
+    "channel": "push",
+    "platform": "android",
+    "pushToken": "<push-token>",
+    "subscribed": true
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "validationError",
+    "message": "Invalid request body"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "appNotFound",
+    "message": "App not found"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="pushToken" type="String" required>
+  Device push token from FCM / APNs. Short alias `token` and legacy `fcmToken` are accepted.
+</RequestParam>
+
+<RequestParam name="subscriberId" type="UUID">
+  Existing AirSignal subscriber to attach this subscription to.
+</RequestParam>
+
+<RequestParam name="subscriptionId" type="UUID">
+  SDK-internal device id for this channel endpoint.
+</RequestParam>
+
+<RequestParam name="externalId" type="String">
+  Your user id, when known. Prefer [Login](/docs/api/users/login) to switch identity.
+</RequestParam>
+
+<RequestParam name="pushEnabled" type="Boolean">
+  Whether the OS currently allows notifications.
+</RequestParam>
+
+<RequestParam name="device" type="Object">
+  Device metadata (`platform`, `model`, `os`, `language`, `timezone`, `country`, and version
+  fields).
+</RequestParam>
+
+<Callout type="info">
+  `POST /v1/devices` is a deprecated alias of this endpoint. New integrations should call
+  `/v1/subscriptions` only.
+</Callout>

@@ -3,17 +3,24 @@ title: API Reference
 description: Collect and send endpoints, authentication, and error handling.
 ---
 
-The AirSignal HTTP API is split into two surfaces with different credentials.
+The AirSignal HTTP API is split into two surfaces with different credentials. Use the REST key
+only from your backend; SDKs use the public App ID.
 
 <Cards>
   <Card title="Authentication" href="/docs/api/authentication" icon="ShieldCheck">
-    Collect (`appId`) vs send (`nsk_...`) — never mix them.
+    App ID for collect routes, REST key for send — never mix them.
   </Card>
-  <Card title="Subscribers" href="/docs/api/subscribers" icon="Users">
-    Register devices, identify users, tags and aliases.
+  <Card title="Messages" href="/docs/api/messages" icon="Send">
+    Send push notifications and check delivery status.
   </Card>
-  <Card title="Notifications" href="/docs/api/notifications" icon="Send">
-    Send and track push notifications.
+  <Card title="Users" href="/docs/api/users" icon="Users">
+    Register subscribers, login, logout, tags, and aliases.
+  </Card>
+  <Card title="Subscriptions" href="/docs/api/subscriptions" icon="Smartphone">
+    Attach and update push subscriptions for a device.
+  </Card>
+  <Card title="Analytics" href="/docs/api/analytics" icon="BarChart3">
+    Report notification clicks and engagement events.
   </Card>
 </Cards>
 

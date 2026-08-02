@@ -15,6 +15,11 @@ content/
     getting-started/
     guides/
     api/
+      authentication.mdx
+      messages/           # push send + get
+      users/              # collect identity, tags, aliases
+      subscriptions/
+      analytics/
     sdks/
       flutter.mdx         # full Flutter SDK guide (single page)
   legal/                  # marketing legal pages → /terms /privacy /refunds
@@ -113,8 +118,22 @@ description: Native iOS SDK — coming soon.
 - `<Steps><Step title>...</Step></Steps>` — numbered walkthroughs
 - `<Tabs items={["a","b"]}><Tab>...</Tab></Tabs>` — platform-specific snippets
 - `<Endpoint method path />` — method + path bar with copy
-- `<Required />` / `<Optional />` — optional styled badges (prefer a **Required** table column for compatibility)
+- `<ApiField />` / `<ApiSection />` / `<ApiOptional />` — API parameter reference blocks
 - Fenced code blocks get syntax highlighting + a copy button automatically
+
+### API page frontmatter
+
+```mdx
+---
+title: Push notification
+sidebarTitle: Push notification
+method: POST
+description: Send a push notification with the AirSignal REST API.
+---
+```
+
+`method` (optional): `GET` | `POST` | `PUT` | `PATCH` | `DELETE` — shown as a colored badge in the
+sidebar before the page title. Keep `badge: Soon` for unfinished pages (that disables the link).
 
 Legal pages use the same MDX pipeline for prose (headings, links, lists, emphasis). Prefer plain
 markdown there unless a Callout is genuinely useful.

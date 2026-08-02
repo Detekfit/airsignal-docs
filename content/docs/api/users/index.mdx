@@ -1,0 +1,42 @@
+---
+title: Users
+description: Register subscribers, identify users, and manage tags and aliases.
+---
+
+Users (subscribers) are the people and devices that receive messages. Collect routes use only
+your public App ID — see [Authentication](/docs/api/authentication). Never send the REST key on
+these routes.
+
+## Endpoints
+
+<Cards>
+  <Card title="Upsert subscriber" href="/docs/api/users/upsert" icon="UserPlus">
+    POST — create or update a subscriber and optional push subscription.
+  </Card>
+  <Card title="Login" href="/docs/api/users/login" icon="LogIn">
+    POST — attach this device to an externalId account.
+  </Card>
+  <Card title="Logout" href="/docs/api/users/logout" icon="LogOut">
+    POST — move this device to a new anonymous subscriber.
+  </Card>
+  <Card title="Heartbeat" href="/docs/api/users/heartbeat" icon="Activity">
+    POST — update last online time for MAU and presence.
+  </Card>
+  <Card title="Set tags" href="/docs/api/users/set-tags" icon="Tags">
+    PUT — set subscriber tags.
+  </Card>
+  <Card title="Delete tags" href="/docs/api/users/delete-tags" icon="Tags">
+    DELETE — remove subscriber tags.
+  </Card>
+  <Card title="Set aliases" href="/docs/api/users/set-aliases" icon="Link">
+    PUT — set alias keys.
+  </Card>
+  <Card title="Delete alias" href="/docs/api/users/delete-alias" icon="Link">
+    DELETE — remove one alias key.
+  </Card>
+  <Card title="Unsubscribe" href="/docs/api/users/unsubscribe" icon="BellOff">
+    POST — soft opt-out (no hard delete on the public API).
+  </Card>
+</Cards>
+
+Base URL: `https://api.airsignal.dev`

@@ -89,7 +89,7 @@ final subscriberId = Airsignal.user.subscriberId;
 ```
 
 Persist this alongside your own user record if you plan to target sends by `subscriberId` from
-your backend. See [Subscribers](/docs/api/subscribers) for the full identity model.
+your backend. See [Users](/docs/api/users) for the full identity model.
 
 ## Identity
 
@@ -142,7 +142,7 @@ await Airsignal.user.removeAlias('facebookId');
 ```
 
 Use tags and aliases for segmentation and cross-system linking — see
-[Subscribers](/docs/api/subscribers) for server-side equivalents.
+[Users](/docs/api/users) for server-side equivalents.
 
 ## Push & engagement
 
@@ -190,8 +190,8 @@ you don't need to call the events API yourself from Flutter.
 ### Action buttons
 
 If a send included `androidButtons`, button taps are reported the same way as a regular click,
-with the tapped id on `notification.actionId`. See [Notifications](/docs/api/notifications) for the
-send-side payload shape.
+with the tapped id on `notification.actionId`. See
+[Push notification](/docs/api/messages/push-notification) for the send-side payload shape.
 
 <Callout type="info">
   Dashboard **Delivered** counts come from FCM accept confirmation, not from the SDK. The SDK only

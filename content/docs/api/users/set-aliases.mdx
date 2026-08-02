@@ -1,0 +1,74 @@
+---
+title: Set aliases
+sidebarTitle: Set aliases
+method: PUT
+description: Set alias keys on a subscriber.
+---
+
+Aliases store alternate identifiers (for example a social network id) on the subscriber.
+
+<Endpoint method="PUT" path="/v1/subscribers/{subscriberId}/aliases" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X PUT 'https://api.airsignal.dev/v1/subscribers/55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe/aliases' \
+  -H 'Content-Type: application/json' \
+  -H 'X-AirSignal-App-Id: app_...' \
+  -d '{
+    "aliases": { "facebookId": "102938" }
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["200", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriber": {
+    "id": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+    "aliases": { "facebookId": "102938" }
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriberNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="subscriberId" type="UUID" required>
+  AirSignal subscriber id (path).
+</RequestParam>
+
+<RequestParam name="aliases" type="Object" required>
+  Map of alias key → value, for example `{ "facebookId": "102938" }`.
+</RequestParam>

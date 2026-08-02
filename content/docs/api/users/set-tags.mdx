@@ -1,0 +1,77 @@
+---
+title: Set tags
+sidebarTitle: Set tags
+method: PUT
+description: Set tags on a subscriber.
+---
+
+Tags are key/value attributes you can use for segmentation and personalization.
+
+<Endpoint method="PUT" path="/v1/subscribers/{subscriberId}/tags" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X PUT 'https://api.airsignal.dev/v1/subscribers/55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe/tags' \
+  -H 'Content-Type: application/json' \
+  -H 'X-AirSignal-App-Id: app_...' \
+  -d '{
+    "tags": { "plan": "pro", "cohort": "beta" }
+  }'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["200", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "subscriber": {
+    "id": "55b8dbbf-cbf4-4ebd-9e06-8a33517a37fe",
+    "tags": [
+      { "key": "plan", "value": "pro" },
+      { "key": "cohort", "value": "beta" }
+    ]
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": {
+    "code": "invalidAppId",
+    "message": "Missing or blank X-AirSignal-App-Id"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "subscriberNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="subscriberId" type="UUID" required>
+  AirSignal subscriber id (path).
+</RequestParam>
+
+<RequestParam name="tags" type="Object" required>
+  Map of tag key → value, for example `{ "plan": "pro", "cohort": "beta" }`.
+</RequestParam>

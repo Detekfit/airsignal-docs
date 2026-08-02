@@ -1,0 +1,81 @@
+---
+title: Get notification
+sidebarTitle: Get notification
+method: GET
+description: Fetch push notification status and delivery counters by id.
+---
+
+Retrieve a notification for the project bound to your REST key, including live delivery counters.
+Poll after a send to watch `status` move from `queued` / `sending` to `completed`, `partial`, or
+`failed`. Scheduled messages return `scheduled` until their send time.
+
+<Endpoint method="GET" path="/v1/notifications/{id}" />
+
+<ApiMethodTabs>
+  <Tab>
+```bash
+curl -X GET 'https://api.airsignal.dev/v1/notifications/a1b2c3d4-e5f6-7890-abcd-ef1234567890' \
+  -H 'Authorization: Key nsk_...'
+```
+  </Tab>
+  <Tab>
+<ApiResponseSample items={["200", "401", "404", "429"]}>
+  <Tab>
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "status": "completed",
+  "channel": "push",
+  "targetType": "subscriber_ids",
+  "headings": { "en": "Order shipped" },
+  "contents": { "en": "Your package is on the way." },
+  "priority": "high",
+  "createdVia": "api",
+  "deliveryStatus": {
+    "audience": 1,
+    "sent": 1,
+    "delivered": 1,
+    "failed": 0,
+    "unsubscribed": 0,
+    "remaining": 0,
+    "capped": 0,
+    "clicks": 0,
+    "clickThroughRate": 0,
+    "channel": "push"
+  }
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "invalidApiKey"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "notificationNotFound"
+}
+```
+  </Tab>
+  <Tab>
+```json
+{
+  "error": "rateLimited",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests",
+  "retryAfterSeconds": 12
+}
+```
+  </Tab>
+</ApiResponseSample>
+  </Tab>
+</ApiMethodTabs>
+
+## Request parameter
+
+<RequestParam name="id" type="UUID" required>
+  Notification id returned from [Push notification](/docs/api/messages/push-notification).
+</RequestParam>

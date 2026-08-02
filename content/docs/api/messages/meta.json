@@ -1,0 +1,4 @@
+{
+  "title": "Messages",
+  "pages": ["index", "push-notification", "get-notification"]
+}

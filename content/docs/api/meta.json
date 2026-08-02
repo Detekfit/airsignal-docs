@@ -1,4 +1,15 @@
 {
   "title": "API Reference",
-  "pages": ["index", "authentication", "subscribers", "notifications"]
+  "pages": [
+    "index",
+    "authentication",
+    "---Messages---",
+    "messages",
+    "---Users---",
+    "users",
+    "---Subscriptions---",
+    "subscriptions",
+    "---Analytics---",
+    "analytics"
+  ]
 }

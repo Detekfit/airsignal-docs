@@ -1,0 +1,15 @@
+{
+  "title": "Users",
+  "pages": [
+    "index",
+    "upsert",
+    "login",
+    "logout",
+    "heartbeat",
+    "set-tags",
+    "delete-tags",
+    "set-aliases",
+    "delete-alias",
+    "unsubscribe"
+  ]
+}

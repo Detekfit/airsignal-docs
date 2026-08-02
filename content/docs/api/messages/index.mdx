@@ -1,0 +1,32 @@
+---
+title: Messages
+description: Create and deliver push notifications from your backend with the REST API key.
+---
+
+Use the Messages API to send push notifications from your server. Authenticate with your project
+REST key (`nsk_...`) — see [Authentication](/docs/api/authentication). Never embed that key in a
+mobile or web client.
+
+## What you can do
+
+- Send a push to specific subscribers, external IDs, or everyone (`All`)
+- Schedule a send for a future time
+- Poll delivery status and engagement counters
+
+## Endpoints
+
+<Cards>
+  <Card title="Push notification" href="/docs/api/messages/push-notification" icon="Send">
+    POST — create and send (or schedule) a push notification.
+  </Card>
+  <Card title="Get notification" href="/docs/api/messages/get-notification" icon="Search">
+    GET — fetch status and delivery counters by id.
+  </Card>
+</Cards>
+
+## Before you start
+
+1. Create an app in the [dashboard](https://airsignal.dev/dashboard)
+2. Reveal or rotate a REST key under app settings — see [API keys](/docs/guides/api-keys)
+
+Base URL: `https://api.airsignal.dev`
