@@ -112,6 +112,8 @@ description: Native iOS SDK — coming soon.
 - `<Cards><Card title href icon /></Cards>` — hub-page link grids
 - `<Steps><Step title>...</Step></Steps>` — numbered walkthroughs
 - `<Tabs items={["a","b"]}><Tab>...</Tab></Tabs>` — platform-specific snippets
+- `<Endpoint method path />` — method + path bar with copy
+- `<Required />` / `<Optional />` — parameter badges in API tables
 - Fenced code blocks get syntax highlighting + a copy button automatically
 
 Legal pages use the same MDX pipeline for prose (headings, links, lists, emphasis). Prefer plain
