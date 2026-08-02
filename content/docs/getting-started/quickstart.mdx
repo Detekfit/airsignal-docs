@@ -1,0 +1,60 @@
+---
+title: Quickstart
+description: Create an app, register a device, and send your first push notification.
+---
+
+<Steps>
+  <Step title="Create an app">
+    In the [dashboard](https://airsignal.dev/dashboard), create a new app, choose **Google push
+    (Messaging)** as the platform, and upload a Google service account JSON — see
+    [Get a Google service account JSON](/docs/guides/service-account) if you don't have one yet.
+    You'll get a public `appId` (`app_...`).
+  </Step>
+  <Step title="Register a device">
+    Call the collect API with your `appId` to register a subscriber and push token:
+
+    ```bash
+    curl -X POST https://api.airsignal.dev/v1/subscribers \
+      -H "X-AirSignal-App-Id: app_..." \
+      -H "Content-Type: application/json" \
+      -d '{
+        "pushToken": "<device-push-token>",
+        "device": { "platform": "android" }
+      }'
+    ```
+
+    The response includes a `subscriberId` — persist it on the device.
+  </Step>
+  <Step title="Generate a REST key">
+    In **Settings** on your app, generate a project REST key (`nsk_...`). This key is used only
+    for sending — never ship it inside a mobile or web client.
+  </Step>
+  <Step title="Send a notification">
+    ```bash
+    curl -X POST https://api.airsignal.dev/v1/notifications \
+      -H "Authorization: Key nsk_..." \
+      -H "Content-Type: application/json" \
+      -d '{
+        "includeSubscriberIds": ["<subscriberId-from-step-2>"],
+        "headings": { "en": "Hello" },
+        "contents": { "en": "Your first AirSignal push" }
+      }'
+    ```
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Building a Flutter app? The [Flutter SDK](/docs/sdks/flutter) wraps steps 1–2 for you — no
+  Firebase Messaging wiring needed in your app.
+</Callout>
+
+## Next steps
+
+<Cards>
+  <Card title="API Reference" href="/docs/api" icon="Code">
+    Full collect and send endpoint catalog.
+  </Card>
+  <Card title="Flutter SDK" href="/docs/sdks/flutter" icon="Smartphone">
+    Install the official package.
+  </Card>
+</Cards>

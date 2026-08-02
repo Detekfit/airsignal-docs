@@ -1,0 +1,50 @@
+---
+title: Authentication
+description: Two credentials — collect with appId, send with an nsk key. Never mix them.
+---
+
+AirSignal uses **two separate credentials**, scoped to different routes.
+
+| Credential | Who uses it | Routes | How |
+|---|---|---|---|
+| **App ID** `app_...` | Mobile / web SDK | Collect: config, subscribers, devices, heartbeat, sessions, unsubscribe, engagement | Header `X-AirSignal-App-Id: app_...` **only** |
+| **REST key** `nsk_...` | Your backend / dashboard | **Send only:** `POST` / `GET /v1/notifications` | `Authorization: Key nsk_...` or Basic `base64(appId:nsk_...)` |
+
+```http
+# SDK collect
+X-AirSignal-App-Id: app_...
+
+# Server send
+Authorization: Key nsk_...
+```
+
+<Callout type="warning">
+  Never ship `nsk_...` inside a mobile or web client release build. Collect routes do not accept
+  the REST key, and send routes do not accept `X-AirSignal-App-Id`.
+</Callout>
+
+## Collect auth errors
+
+All `/v1` collect routes return a nested camelCase error:
+
+```json
+{ "error": { "code": "appNotFound", "message": "..." } }
+```
+
+| Condition | HTTP | `error.code` |
+|---|---|---|
+| Missing / blank header | 401 | `invalidAppId` |
+| App id not in database | 404 | `appNotFound` |
+| App exists but disabled | 401 | `appDisabled` |
+
+Branch on `error.code` — never parse the message text.
+
+## Conventions
+
+| Topic | Rule |
+|---|---|
+| JSON casing | camelCase everywhere |
+| Content type | `application/json; charset=utf-8` |
+| Timezones | IANA strings (e.g. `Asia/Dhaka`) |
+| Platform values | `android` \| `ios` \| `web` (engagement also allows `email`) |
+| Deletes | Public API is soft-unsubscribe only; hard delete is dashboard-only |

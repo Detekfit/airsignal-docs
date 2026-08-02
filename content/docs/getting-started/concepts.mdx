@@ -1,0 +1,31 @@
+---
+title: Core concepts
+description: Apps, subscribers, subscriptions, and channels.
+---
+
+AirSignal's data model is small — four concepts cover almost everything.
+
+| Concept | Meaning |
+|---|---|
+| **Organization** | Your dashboard tenant. Owns apps, members, and billing. |
+| **App (project)** | One push sender + audience, identified by a public `appId`. |
+| **Subscriber** | A stable AirSignal UUID for one end user, with an optional `externalId`, profile, tags, and aliases. Used for send targeting (`includeSubscriberIds`). |
+| **Subscription** | One channel endpoint owned by a subscriber — a push device, an email address, etc. A subscriber may own many. |
+
+## Channels
+
+- **push** — live today. Backed by FCM.
+- **email** — collected as a subscription row; sending arrives later.
+- **sms** / **in_app** — schema-ready, not yet sendable.
+
+## Identity: anonymous vs identified
+
+A new device starts as an **anonymous** subscriber. Call `login` with an `externalId` (e.g. your
+own user id) to attach the device to a known identity — creating the account if it doesn't exist
+yet. Call `logout` to detach the device back to a fresh anonymous subscriber without affecting the
+identified account. See [Subscribers](/docs/api/subscribers) for the exact request shapes.
+
+<Callout type="warning">
+  Don't set `externalId` directly on the upsert call to switch accounts — it's ignored on
+  conflict. Use `login` instead.
+</Callout>

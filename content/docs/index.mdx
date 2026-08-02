@@ -1,0 +1,58 @@
+---
+title: AirSignal Documentation
+description: Everything you need to add push notifications to your product with AirSignal.
+---
+
+AirSignal is a hosted push notification platform. Create an app, drop in an SDK or call the REST
+API, and send targeted push to your users — with delivery analytics built in.
+
+<Cards>
+  <Card
+    title="Getting Started"
+    href="/docs/getting-started"
+    icon="Rocket"
+  >
+    Create your first app and send a test notification in minutes.
+  </Card>
+  <Card
+    title="Guides"
+    href="/docs/guides"
+    icon="BookOpen"
+  >
+    Step-by-step setup: apps, API keys, Google service account.
+  </Card>
+  <Card
+    title="API Reference"
+    href="/docs/api"
+    icon="Code"
+  >
+    Collect and send endpoints, auth, errors, rate limits.
+  </Card>
+  <Card
+    title="Flutter SDK"
+    href="/docs/sdks/flutter"
+    icon="Smartphone"
+  >
+    Install, initialize, and receive push in a Flutter app.
+  </Card>
+</Cards>
+
+## How AirSignal works
+
+<Steps>
+  <Step title="Create an app">
+    Each app is one push sender + audience, identified by a public `appId`.
+  </Step>
+  <Step title="Collect subscribers">
+    Your SDK or client calls `/v1` collect routes with `X-AirSignal-App-Id` to register devices.
+  </Step>
+  <Step title="Send notifications">
+    Your backend calls `POST /v1/notifications` with a project REST key (`nsk_...`) to target
+    subscribers, external ids, or your whole audience.
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Collect (`X-AirSignal-App-Id`) and send (`nsk_...`) are two different credentials. Never mix
+  them — see [Authentication](/docs/api/authentication).
+</Callout>

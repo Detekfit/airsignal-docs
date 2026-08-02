@@ -1,0 +1,27 @@
+---
+title: API Reference
+description: Collect and send endpoints, authentication, and error handling.
+---
+
+The AirSignal HTTP API is split into two surfaces with different credentials.
+
+<Cards>
+  <Card title="Authentication" href="/docs/api/authentication" icon="ShieldCheck">
+    Collect (`appId`) vs send (`nsk_...`) — never mix them.
+  </Card>
+  <Card title="Subscribers" href="/docs/api/subscribers" icon="Users">
+    Register devices, identify users, tags and aliases.
+  </Card>
+  <Card title="Notifications" href="/docs/api/notifications" icon="Send">
+    Send and track push notifications.
+  </Card>
+</Cards>
+
+<Callout type="info">
+  All request and response JSON fields use **camelCase** (`externalId`, `pushToken`,
+  `subscriberId`). Machine-readable error codes are also camelCase (`appNotFound`,
+  `subscriberNotFound`).
+</Callout>
+
+A machine-readable OpenAPI document is available at
+[`api.airsignal.dev/openapi.json`](https://api.airsignal.dev/openapi.json).

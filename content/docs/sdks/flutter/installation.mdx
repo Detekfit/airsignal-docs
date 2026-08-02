@@ -1,0 +1,32 @@
+---
+title: Installation
+description: Add the airsignal_flutter package to your app.
+---
+
+<Steps>
+  <Step title="Add the dependency">
+    ```bash
+    flutter pub add airsignal_flutter
+    ```
+  </Step>
+  <Step title="Android setup">
+    No manual Firebase setup is required — the package bundles what it needs to receive push via
+    FCM. Make sure your app's Android `applicationId` matches the Android app registered in the
+    Firebase project used for your [service account](/docs/guides/service-account).
+  </Step>
+  <Step title="iOS / Web">
+    <Callout type="warning">
+      iOS and Web are on the platform roadmap. The collect API contract is already stable for
+      them — see [Platform matrix](/docs/api).
+    </Callout>
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Do not add `firebase_messaging` yourself. Push receive and token refresh live inside
+  `airsignal_flutter` — a second messaging plugin will conflict with it.
+</Callout>
+
+## Next
+
+Continue to [Initialization](/docs/sdks/flutter/initialization).

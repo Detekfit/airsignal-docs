@@ -1,0 +1,65 @@
+---
+title: Notifications
+description: Send push notifications and track delivery with the REST key.
+---
+
+Routes on this page use `Authorization: Key nsk_...` — see [Authentication](/docs/api/authentication).
+
+## Send a notification
+
+`POST /v1/notifications`
+
+Target with **one** of `includeSubscriberIds`, `includeExternalIds`, or `includedSegments`.
+
+```json
+{
+  "includeSubscriberIds": ["uuid-1"],
+  "headings": { "en": "Title" },
+  "contents": { "en": "Body" },
+  "imageUrl": "https://cdn.example.com/banner.png",
+  "launchUrl": "https://example.com/orders/1043",
+  "data": { "orderId": "1043" },
+  "sendAfter": "2026-07-28T12:00:00.000Z"
+}
+```
+
+| Field | Notes |
+|---|---|
+| `imageUrl` | Public HTTPS image (big picture) |
+| `launchUrl` | Opened / passed to the SDK on click |
+| `collapseId` | FCM Android collapse key |
+| `ttl` | Converted to FCM TTL |
+| `androidButtons` | Up to 3 action buttons |
+| `sendAfter` | Future ISO time → notification is `scheduled` |
+
+An optional `Idempotency-Key` header prevents duplicate sends on retry.
+
+<Callout type="warning">
+  Send can return `402 mauLimitExceeded` when the organization is frozen at its included MAU.
+  Don't auto-retry plan errors — they're terminal until the plan or payment state changes.
+</Callout>
+
+## Check status
+
+`GET /v1/notifications/{id}` returns status (`scheduled` | `queued` | ...) plus delivery counters:
+audience, sent, delivered, failed, unsubscribed, remaining, capped, clicks, CTR.
+
+## Report engagement (SDK side)
+
+`POST /v1/notifications/{notificationId}/events` — header `X-AirSignal-App-Id` only.
+
+```json
+{ "type": "clicked", "subscriberId": "<uuid>", "subscriptionId": "<device-uuid>", "platform": "android" }
+```
+
+Only `clicked` and `buttonClicked` are accepted — `received` is rejected. A click only counts
+toward CTR when it can be matched to a confirmed delivery for that subscriber or device.
+
+## Rate limits
+
+| Scope | Budget |
+|---|---|
+| Collect `/v1` (`X-AirSignal-App-Id`) | 100 requests / minute per IP |
+| Send `/v1/notifications` (`nsk_...`) | Free 10/s · Starter 50/s · Pro 200/s · Enterprise 500+/s |
+
+Throttled responses are `429` with `Retry-After`.

@@ -1,0 +1,29 @@
+---
+title: Create an app
+description: Set up a new AirSignal app and get your public appId.
+---
+
+An **app** is one push sender plus its audience. You'll usually create one app per product or
+per environment (e.g. separate apps for staging and production).
+
+<Steps>
+  <Step title="Open the dashboard">
+    Go to [airsignal.dev/dashboard](https://airsignal.dev/dashboard) and select your organization.
+  </Step>
+  <Step title="Create the app">
+    Click **New app**, give it a name, and choose **Google push (Messaging)** as the platform.
+  </Step>
+  <Step title="Upload your service account">
+    Upload a Google service account JSON so AirSignal can send through FCM on your behalf. See
+    [Get a Google service account JSON](/docs/guides/service-account) if you need to create one.
+  </Step>
+  <Step title="Copy your appId">
+    Your new app has a public `appId` (`app_...`). SDKs and clients use this with
+    `X-AirSignal-App-Id` for every collect call — see [Authentication](/docs/api/authentication).
+  </Step>
+</Steps>
+
+<Callout type="tip">
+  Project REST keys (`nsk_...`) are optional at this point — only generate one under
+  **Settings** when you're ready to send from your backend. See [API keys](/docs/guides/api-keys).
+</Callout>

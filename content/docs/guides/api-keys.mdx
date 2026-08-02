@@ -1,0 +1,42 @@
+---
+title: API keys
+description: Generate, reveal, and rotate project REST keys for sending notifications.
+---
+
+Every app has an optional **project REST key** (`nsk_...`) used only to send notifications from
+your backend. It's separate from the public `appId` used by client SDKs.
+
+<Callout type="warning">
+  Never ship an `nsk_...` key inside a mobile or web app release build. It belongs on your server
+  only.
+</Callout>
+
+## Generate a key
+
+<Steps>
+  <Step title="Open app settings">
+    Go to your app in the dashboard → **Settings**.
+  </Step>
+  <Step title="Generate">
+    Click **Generate REST key**. The key is shown once — copy it into your backend's secret store.
+  </Step>
+</Steps>
+
+## Reveal or rotate
+
+- **Reveal** re-displays the current key from an encrypted store (dashboard session required).
+- **Rotate** issues a brand new key and immediately invalidates the old one. Update your backend
+  before rotating in production to avoid a gap in send capability.
+
+## Using the key
+
+```bash
+curl -X POST https://api.airsignal.dev/v1/notifications \
+  -H "Authorization: Key nsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "includedSegments": ["All"], "headings": { "en": "Hi" }, "contents": { "en": "Hello!" } }'
+```
+
+Basic auth is also supported: `Authorization: Basic base64(appId:nsk_...)`.
+
+See [Send API](/docs/api/notifications) for the full request/response contract.

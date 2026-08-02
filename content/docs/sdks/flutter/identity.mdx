@@ -1,0 +1,45 @@
+---
+title: Identity
+description: Attach a device to a known user with login, and detach with logout.
+---
+
+A newly initialized device starts **anonymous**. Call `login` once you know who the user is (for
+example, right after your own app's sign-in completes).
+
+## Login
+
+```dart
+await AirSignal.instance.login(externalId: 'user_123');
+```
+
+This attaches the current device's push subscription to the subscriber identified by
+`externalId`, creating the account if it doesn't exist yet. Multiple devices can share the same
+`externalId` after each logs in.
+
+## Logout
+
+```dart
+await AirSignal.instance.logout();
+```
+
+Moves the device to a brand-new anonymous subscriber. The identified account is kept even if it
+now has zero devices — logout does not delete data or opt the user out of push.
+
+<Callout type="warning">
+  `login` / `logout` change **which account this device belongs to**. To stop sending push to a
+  user entirely, call the opt-out API instead — see [Push & engagement](/docs/sdks/flutter/push).
+</Callout>
+
+## Tags and aliases
+
+```dart
+await AirSignal.instance.setTags({'plan': 'pro', 'cohort': 'beta'});
+await AirSignal.instance.setAliases({'facebookId': '102938'});
+```
+
+Use tags and aliases for segmentation and cross-system linking — see
+[Subscribers](/docs/api/subscribers) for server-side equivalents.
+
+## Next
+
+Continue to [Push & engagement](/docs/sdks/flutter/push).
