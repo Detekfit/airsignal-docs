@@ -22,7 +22,7 @@ content/
     terms.mdx             # → /terms
     privacy.mdx           # → /privacy
     refunds.mdx           # → /refunds
-assets/                   # images; referenced via raw.githubusercontent URLs
+assets/                   # images; use /assets/... paths in MDX (resolved via jsDelivr CDN)
 ```
 
 ## URL mapping
