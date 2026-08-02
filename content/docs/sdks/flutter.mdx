@@ -215,26 +215,3 @@ Airsignal.debug.setLogLevel(AirsignalLogLevel.verbose);
 ```
 
 Levels: `none`, `error`, `warn` (default), `info`, `verbose`.
-
-## What the SDK does for you
-
-Heartbeat, session start/end, token refresh, and click engagement are handled automatically inside
-the plugin — there are no public Dart APIs for those steps. Collect calls use
-`X-AirSignal-App-Id` only; never put a REST key (`nsk_...`) in a Flutter app.
-
-## API reference (host surface)
-
-| API | Purpose |
-|---|---|
-| `Airsignal.initialize(appId:, showNotificationOnForeground:)` | Bootstrap |
-| `Airsignal.login(externalId)` / `logout()` | Identity switch |
-| `Airsignal.optIn()` / `optOut()` | Push channel |
-| `Airsignal.user.subscriberId` / `externalId` / `email` / `name` / `phone` | Cached identity |
-| `Airsignal.user.setEmail` / `setName` / `setPhone` | Profile upsert |
-| `Airsignal.user.addTags` / `removeTags` | Tags |
-| `Airsignal.user.addAliases` / `removeAlias` | Aliases |
-| `Airsignal.notifications.requestPermission` / `getPermissionStatus` | OS permission |
-| `Airsignal.notifications.addClickListener` | Open / tap |
-| `Airsignal.notifications.addForegroundWillDisplayListener` | Foreground will-display |
-| `Airsignal.pushSubscription` / `refreshPushSubscription()` | Push snapshot |
-| `Airsignal.debug.setLogLevel` | Logging |
