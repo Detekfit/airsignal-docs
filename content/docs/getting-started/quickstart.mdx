@@ -13,7 +13,7 @@ description: Create an app, register a device, and send your first push notifica
   <Step title="Register a device">
     Call the collect API with your `appId` to register a subscriber and push token:
 
-    ```bash
+    ```curl.sh
     curl -X POST https://api.airsignal.dev/v1/subscribers \
       -H "X-AirSignal-App-Id: app_..." \
       -H "Content-Type: application/json" \
@@ -30,7 +30,7 @@ description: Create an app, register a device, and send your first push notifica
     for sending — never ship it inside a mobile or web client.
   </Step>
   <Step title="Send a notification">
-    ```bash
+    ```curl.sh
     curl -X POST https://api.airsignal.dev/v1/notifications \
       -H "Authorization: Key nsk_..." \
       -H "Content-Type: application/json" \

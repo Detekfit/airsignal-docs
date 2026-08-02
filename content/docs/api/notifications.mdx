@@ -11,7 +11,7 @@ Routes on this page use `Authorization: Key nsk_...` — see [Authentication](/d
 
 Target with **one** of `includeSubscriberIds`, `includeExternalIds`, or `includedSegments`.
 
-```json
+```request.json
 {
   "includeSubscriberIds": ["uuid-1"],
   "headings": { "en": "Title" },
@@ -48,7 +48,7 @@ audience, sent, delivered, failed, unsubscribed, remaining, capped, clicks, CTR.
 
 `POST /v1/notifications/{notificationId}/events` — header `X-AirSignal-App-Id` only.
 
-```json
+```request.json
 { "type": "clicked", "subscriberId": "<uuid>", "subscriptionId": "<device-uuid>", "platform": "android" }
 ```
 

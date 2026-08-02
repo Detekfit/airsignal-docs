@@ -17,7 +17,7 @@ push receive internally, so you do **not** add `firebase_messaging` or ship
 
 <Steps>
   <Step title="Add the dependency">
-    ```bash
+    ```install.sh
     flutter pub add airsignal_flutter
     ```
   </Step>
@@ -41,7 +41,7 @@ push receive internally, so you do **not** add `firebase_messaging` or ship
 
 ## Initialization
 
-```dart
+```main.dart
 import 'package:airsignal_flutter/airsignal_flutter.dart';
 
 void main() async {
@@ -58,7 +58,7 @@ config for your app, obtains an FCM token, and registers a subscriber automatica
 
 ### Local / staging override
 
-```dart
+```main.dart
 await AirSignal.init(
   appId: 'app_...',
   apiBaseUrl: 'https://staging.api.airsignal.dev',
@@ -70,7 +70,7 @@ the default.
 
 ### Reading the subscriber id
 
-```dart
+```main.dart
 final subscriberId = AirSignal.instance.subscriberId;
 ```
 
@@ -84,7 +84,7 @@ example, right after your own app's sign-in completes).
 
 ### Login
 
-```dart
+```main.dart
 await AirSignal.instance.login(externalId: 'user_123');
 ```
 
@@ -94,7 +94,7 @@ This attaches the current device's push subscription to the subscriber identifie
 
 ### Logout
 
-```dart
+```main.dart
 await AirSignal.instance.logout();
 ```
 
@@ -108,7 +108,7 @@ now has zero devices — logout does not delete data or opt the user out of push
 
 ### Tags and aliases
 
-```dart
+```main.dart
 await AirSignal.instance.setTags({'plan': 'pro', 'cohort': 'beta'});
 await AirSignal.instance.setAliases({'facebookId': '102938'});
 ```
@@ -120,7 +120,7 @@ Use tags and aliases for segmentation and cross-system linking — see
 
 ### Requesting permission
 
-```dart
+```main.dart
 final granted = await AirSignal.instance.requestPushPermission();
 ```
 
@@ -132,7 +132,7 @@ Call this at a sensible point in your onboarding flow — the SDK reports the re
 The SDK registers foreground and background handlers internally. To react to a notification while
 your app is open:
 
-```dart
+```main.dart
 AirSignal.instance.onNotificationReceived.listen((notification) {
   // e.g. show an in-app banner
 });
@@ -140,7 +140,7 @@ AirSignal.instance.onNotificationReceived.listen((notification) {
 
 ### Handling taps / launch URLs
 
-```dart
+```main.dart
 AirSignal.instance.onNotificationOpened.listen((notification) {
   final launchUrl = notification.launchUrl;
   if (launchUrl != null) {
@@ -165,7 +165,7 @@ payload shape.
 
 ### Opting out
 
-```dart
+```main.dart
 await AirSignal.instance.optOut(pushOnly: true);
 ```
 

@@ -10,7 +10,7 @@ AirSignal uses **two separate credentials**, scoped to different routes.
 | **App ID** `app_...` | Mobile / web SDK | Collect: config, subscribers, devices, heartbeat, sessions, unsubscribe, engagement | Header `X-AirSignal-App-Id: app_...` **only** |
 | **REST key** `nsk_...` | Your backend / dashboard | **Send only:** `POST` / `GET /v1/notifications` | `Authorization: Key nsk_...` or Basic `base64(appId:nsk_...)` |
 
-```http
+```headers.http
 # SDK collect
 X-AirSignal-App-Id: app_...
 
@@ -27,7 +27,7 @@ Authorization: Key nsk_...
 
 All `/v1` collect routes return a nested camelCase error:
 
-```json
+```request.json
 { "error": { "code": "appNotFound", "message": "..." } }
 ```
 
