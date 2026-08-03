@@ -28,26 +28,8 @@ curl -X POST 'https://api.airsignal.dev/v1/notifications' \
   <Tab>
 ```json
 {
-  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "status": "queued",
-  "channel": "push",
-  "targetType": "subscriber_ids",
-  "headings": { "en": "Order shipped" },
-  "contents": { "en": "Your package is on the way." },
-  "priority": "high",
-  "createdVia": "api",
-  "deliveryStatus": {
-    "audience": 1,
-    "sent": 0,
-    "delivered": 0,
-    "failed": 0,
-    "unsubscribed": 0,
-    "remaining": 1,
-    "capped": 0,
-    "clicks": 0,
-    "clickThroughRate": 0,
-    "channel": "push"
-  }
+  "id": "69313f95-7bf6-450c-9862-69415aafe67f", 
+  "status": "completed"  
 }
 ```
   </Tab>
@@ -145,7 +127,7 @@ Audience — provide **exactly one** of `includeSubscriberIds`, `includeExternal
 </RequestParam>
 
 <RequestParam name="data" type="Object">
-  Custom FCM data payload (max 50 keys, 8 KB).
+  Custom data payload (max 50 keys, 8 KB) sent example `{ "value": "key", "hello": "world" }`
 </RequestParam>
 
 <RequestParam name="imageUrl" type="String">
