@@ -27,9 +27,10 @@ push. It owns push receive internally, so you do **not** add a second push SDK o
     }
     ```
 
-    Until the artifact is on Maven Central, publish from the `airsignal_android`
-    repo with `./gradlew :airsignal:publishToMavenLocal` and consume from
-    `mavenLocal()`.
+    Coordinates: `com.detekfit:AirSignal` on Maven Central. Source:
+    [github.com/Detekfit/airsignal_android](https://github.com/Detekfit/airsignal_android).
+    For local testing before Central sync, use
+    `./gradlew :airsignal:publishToMavenLocal` and `mavenLocal()`.
   </Step>
   <Step title="Android setup">
     No manual push-provider setup is required — the package bundles what it needs to receive push.
