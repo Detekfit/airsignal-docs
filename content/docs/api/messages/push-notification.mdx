@@ -6,6 +6,9 @@ description: Send a push notification with the AirSignal REST API.
 ---
 
 Create and dispatch a push notification for the project bound to your REST key.
+The **201** body is a create ack (`id` + `status` only). Poll
+[Get notification](/docs/api/messages/get-notification) for full detail and live
+`deliveryStatus`.
 
 <Endpoint method="POST" path="/v1/notifications" />
 
@@ -28,8 +31,8 @@ curl -X POST 'https://api.airsignal.dev/v1/notifications' \
   <Tab>
 ```json
 {
-  "id": "69313f95-7bf6-450c-9862-69415aafe67f", 
-  "status": "completed"  
+  "id": "69313f95-7bf6-450c-9862-69415aafe67f",
+  "status": "queued"
 }
 ```
   </Tab>

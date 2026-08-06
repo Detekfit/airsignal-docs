@@ -27,10 +27,23 @@ curl -X GET 'https://api.airsignal.dev/v1/notifications/a1b2c3d4-e5f6-7890-abcd-
   "status": "completed",
   "channel": "push",
   "targetType": "subscriber_ids",
-  "headings": { "en": "Order shipped" },
-  "contents": { "en": "Your package is on the way." },
-  "priority": "high",
-  "createdVia": "api",
+  "message": {
+    "name": null,
+    "headings": { "en": "Order shipped" },
+    "contents": { "en": "Your package is on the way." },
+    "data": {},
+    "priority": "high",
+    "imageUrl": null,
+    "launchUrl": null,
+    "collapseId": null,
+    "ttl": null,
+    "androidButtons": []
+  },
+  "scheduledAt": null,
+  "deliveryMode": "sameTime",
+  "localDeliveryTime": null,
+  "createdAt": "2026-08-03T03:20:00.000Z",
+  "completedAt": "2026-08-03T03:20:01.000Z",
   "deliveryStatus": {
     "audience": 1,
     "sent": 1,
@@ -40,8 +53,7 @@ curl -X GET 'https://api.airsignal.dev/v1/notifications/a1b2c3d4-e5f6-7890-abcd-
     "remaining": 0,
     "capped": 0,
     "clicks": 0,
-    "clickThroughRate": 0,
-    "channel": "push"
+    "clickThroughRate": 0
   }
 }
 ```

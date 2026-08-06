@@ -1,29 +1,243 @@
 ---
 title: Android SDK
-description: Native Android SDK for AirSignal push — coming soon.
+description: Native Android push notification SDK for AirSignal — one library, no manual push setup required.
 sidebarTitle: Android
-badge: Soon
 ---
 
-<Callout type="info">
-  The native Android SDK is on the roadmap. Until it ships, use the same collect API contracts
-  documented in [API Reference](/docs/api) — or the [Flutter SDK](/docs/sdks/flutter) if your app
-  is Flutter-based.
+The `com.airsignal:AirSignal` library (`0.1.0`) is the single dependency your Android app needs for
+push. It owns push receive internally, so you do **not** add a second push SDK or ship
+`google-services.json` yourself for AirSignal.
+
+<Callout type="warning">
+  Requires a Google service account uploaded on your app — see
+  [Get a Google service account JSON](/docs/guides/service-account).
 </Callout>
 
-## Planned coverage
+<Callout type="info">
+  **Package:** `com.airsignal` · **minSdk 21** (Android 5.0) · **compileSdk / targetSdk 36**.
+</Callout>
 
-When this guide is ready it will be a single start-to-end page covering:
+## Installation
 
-1. Installation (Gradle)
-2. Initialization (`appId`)
-3. Identity (login / logout / `externalId`)
-4. Push permissions, receive, and engagement
+<Steps>
+  <Step title="Add the dependency">
+    ```gradle.kts
+    dependencies {
+        implementation("com.airsignal:AirSignal:0.1.0")
+    }
+    ```
 
-## Today
+    Until the artifact is on Maven Central, publish from the `airsignal_android`
+    repo with `./gradlew :airsignal:publishToMavenLocal` and consume from
+    `mavenLocal()`.
+  </Step>
+  <Step title="Android setup">
+    No manual push-provider setup is required — the package bundles what it needs to receive push.
+    Make sure your app's Android `applicationId` matches the Android app registered in the Google
+    project used for your [service account](/docs/guides/service-account).
+  </Step>
+  <Step title="Permissions result (API 33+)">
+    Forward `onRequestPermissionsResult` so `requestPermission` can complete:
 
-- Collect routes are already platform-agnostic (`device.platform: "android"`)
-- Push transport remains FCM via your uploaded
-  [Google service account](/docs/guides/service-account)
-- Flutter apps should use [Flutter SDK](/docs/sdks/flutter) instead of adding
-  `firebase_messaging` themselves
+    ```MainActivity.kt
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        if (AirSignalPermission.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            return
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+    ```
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Do not add another push messaging library yourself. Push receive and token refresh live inside
+  `AirSignal` — a second messaging stack will conflict with it.
+</Callout>
+
+## Initialization
+
+Register click / foreground listeners **before** `initialize` so cold-start opens are delivered.
+
+```MainActivity.kt
+import android.app.Application
+import com.airsignal.AirSignal
+import com.airsignal.models.AirSignalClickListener
+import com.airsignal.models.AirSignalForegroundWillDisplayListener
+
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        AirSignal.notifications.addClickListener(
+            AirSignalClickListener { event ->
+                // User opened a notification.
+            },
+        )
+
+        AirSignal.notifications.addForegroundWillDisplayListener(
+            AirSignalForegroundWillDisplayListener { event ->
+                // Push arrived while the app is open.
+            },
+        )
+
+        AirSignal.initialize(this, "app_...")
+    }
+}
+```
+
+`AirSignal.initialize` talks to the hosted Airsignal API (fixed, not host-configurable), loads
+push client config, obtains a push token, and registers a subscriber automatically.
+
+| Argument | Default | Purpose |
+|---|---|---|
+| `context` | required | Application or Activity context |
+| `appId` | required | Public app id from the AirSignal dashboard |
+| `showNotificationOnForeground` | `true` | Show a system tray banner while the app is open |
+
+On a bad / unknown app id, `initialize` throws `AirSignalCollectAuthException` with
+`code` of `appNotFound`, `invalidAppId`, or `appDisabled` — switch on `e.code` /
+`AirSignalErrorCode`, not the message text.
+
+### Reading the subscriber id
+
+```MainActivity.kt
+val subscriberId = AirSignal.user.subscriberId
+// or: AirSignal.pushSubscription.subscriberId
+```
+
+Persist this alongside your own user record if you plan to target sends by `subscriberId` from
+your backend. See [Users](/docs/api/users) for the full identity model.
+
+## Identity
+
+A newly initialized device starts **anonymous**. Call `login` once you know who the user is (for
+example, right after your own app's sign-in completes).
+
+### Login
+
+```MainActivity.kt
+AirSignal.login("user_123")
+```
+
+This attaches the current device's push subscription to the subscriber identified by
+`externalId`, creating the account if it doesn't exist yet. Multiple devices can share the same
+`externalId` after each logs in.
+
+### Logout
+
+```MainActivity.kt
+AirSignal.logout()
+```
+
+Moves the device to a brand-new anonymous subscriber. The identified account is kept even if it
+now has zero devices — logout does **not** delete data or opt the user out of push.
+
+<Callout type="warning">
+  `login` / `logout` change **which account this device belongs to**. To stop sending push to this
+  device, use [optOut](#opting-out).
+</Callout>
+
+### Profile
+
+```MainActivity.kt
+AirSignal.user.setEmail("user@example.com")
+AirSignal.user.setName("Ada Lovelace")
+AirSignal.user.setPhone("+15551234567")
+```
+
+### Tags and aliases
+
+```MainActivity.kt
+AirSignal.user.addTags(mapOf("plan" to "pro", "cohort" to "beta"))
+AirSignal.user.addTags(listOf("vip", "beta")) // value-only tags
+
+AirSignal.user.removeTags(keys = listOf("cohort"))
+AirSignal.user.removeTags(values = listOf("vip"))
+
+AirSignal.user.addAliases(mapOf("facebookId" to "102938"))
+AirSignal.user.removeAlias("facebookId")
+```
+
+Use tags and aliases for segmentation and cross-system linking — see
+[Users](/docs/api/users) for server-side equivalents.
+
+## Push & engagement
+
+### Requesting permission
+
+```MainActivity.kt
+AirSignal.notifications.requestPermission { granted ->
+    // granted == true when the OS allows notifications
+}
+```
+
+Call this at a sensible point in your onboarding flow. On grant, the SDK registers the push token
+with `pushEnabled: true`. On deny, it soft-unsubscribes push for this device.
+
+```MainActivity.kt
+val status = AirSignal.notifications.getPermissionStatus()
+// "granted" | "denied" | "notDetermined"
+```
+
+### Foreground display
+
+While the app is open, foreground pushes fire
+`addForegroundWillDisplayListener` and (by default) also show a tray banner.
+
+Call `event.preventDefault()` **synchronously** in that listener to suppress the tray when it
+would otherwise show. Background / killed deliveries always use the system tray when the OS
+delivers them.
+
+### Handling taps / launch URLs
+
+```MainActivity.kt
+AirSignal.notifications.addClickListener(
+    AirSignalClickListener { event ->
+        val notification = event.notification
+        val launchUrl = notification.launchUrl
+        val actionId = notification.actionId // androidButtons tap, if any
+        val data = notification.additionalData
+    },
+)
+```
+
+A tap opens either the `https` `launchUrl` in the system browser **or** your app — never both.
+When a link opens and your app was not already running, the click listener receives the event on
+the next app launch (within 24 hours). Action-button taps always open the app.
+
+Opening a notification automatically reports a `clicked` (or `buttonClicked`) engagement event —
+you don't need to call the events API yourself from the SDK.
+
+### Action buttons
+
+If a send included `androidButtons`, button taps are reported the same way as a regular click,
+with the tapped id on `notification.actionId`. See
+[Push notification](/docs/api/messages/push-notification) for the send-side payload shape.
+
+<Callout type="info">
+  Dashboard **Delivered** counts come from the push provider’s accept confirmation, not from the
+  SDK. The SDK only ever reports clicks, not delivery or receipt.
+</Callout>
+
+### Opting in / out
+
+```MainActivity.kt
+AirSignal.optOut() // soft-unsubscribe this device from push only
+AirSignal.optIn()  // re-enable push if OS permission is granted
+```
+
+`optOut` always soft-unsubscribes **push only** (`?pushOnly=true` under the hood) — it does not
+opt the subscriber out of email. Logout is separate and does **not** call `optOut`.
+
+## Debug logging
+
+```MainActivity.kt
+AirSignal.debug.setLogLevel(AirSignalLogLevel.VERBOSE)
+```
+
+Levels: `NONE`, `ERROR`, `WARN` (default), `INFO`, `VERBOSE`.
