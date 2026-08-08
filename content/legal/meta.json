@@ -1,4 +1,13 @@
 {
   "title": "Legal",
-  "pages": ["terms", "privacy", "refunds"]
+  "pages": [
+    "terms",
+    "aup",
+    "privacy",
+    "cookies",
+    "refunds",
+    "dpa",
+    "subprocessors",
+    "enterprise-sla"
+  ]
 }

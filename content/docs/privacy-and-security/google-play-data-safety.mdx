@@ -1,0 +1,43 @@
+---
+title: Google Play Data safety
+description: How to complete the Play Console Data safety form when using AirSignal for Android push.
+sidebarTitle: Google Play Data safety
+---
+
+Google Play requires a Data safety form. Declare data collected by **your app**, including data sent
+to AirSignal.
+
+## AirSignal-related collection (typical Android + Flutter)
+
+| Data type (Play categories) | Collected? | Notes |
+| --- | --- | --- |
+| Device or other IDs | Yes | Push token / subscription identifiers |
+| App activity / interactions | Yes | Sessions, heartbeats, notification opens if you use those APIs |
+| Personal info (name, email, phone) | Only if you send it | Optional profile fields |
+| User IDs | Only if you set `externalId` | Your account identifier |
+| Approximate location | Optional | Only if you send country/timezone-style fields |
+
+## Data sharing
+
+- Data is processed by AirSignal (Detekfit Ltd) as a **service provider / processor** to deliver push
+  and analytics for your app.
+- Delivery uses Google’s push infrastructure (FCM). See [Subprocessors](/subprocessors) for other
+  vendors that may process data for the Services.
+
+## Security practices (form answers)
+
+- Data is protected in transit.
+- AirSignal applies access controls and protects sensitive credentials you upload.
+- Users can request deletion via your app/support; you can soft-unsubscribe via API and hard-delete
+  in the AirSignal dashboard.
+
+## Not collected by AirSignal by default
+
+Financial payment info of End Users, health data, photos, contacts, precise GPS — unless **you**
+choose to put such data into tags or payloads (which you should not for Sensitive Information).
+
+## Related
+
+- [Data collected by the SDK](/docs/privacy-and-security/data-collected-by-the-sdk)
+- [Android SDK](/docs/sdks/android)
+- [Flutter SDK](/docs/sdks/flutter)

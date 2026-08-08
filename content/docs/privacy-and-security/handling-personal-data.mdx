@@ -1,0 +1,45 @@
+---
+title: Handling personal data
+description: Soft unsubscribe, hard delete, retention, and how customers manage End User data in AirSignal.
+sidebarTitle: Handling personal data
+---
+
+## Soft unsubscribe (push opt-out)
+
+Public collect APIs support soft unsubscribe for a push subscription (the device stops receiving
+push). This is the correct path for End User opt-out from the SDK.
+
+Inactive or invalid push endpoints may also be unsubscribed automatically so you are not billed or
+messaged against dead devices.
+
+## Hard delete
+
+Hard delete of subscribers is available in the **dashboard** for authenticated organization users.
+There is no public hard-delete subscriber API for apps. Use the dashboard when an End User exercises
+erasure and you choose to remove their AirSignal record entirely.
+
+## Login / logout identity
+
+- **Login** associates the current device with your `externalId` (creating the identified subscriber
+  if needed).
+- **Logout** returns the device to an anonymous subscriber and keeps the identified account; it
+  does **not** by itself opt the user out of push.
+
+## Retention
+
+- Subscriber and subscription records remain while your organization/app is active, subject to your
+  deletions.
+- Analytics history follows your **plan retention window**.
+- Leaving a paid plan may shorten how long analytics history is kept.
+
+## Export
+
+Use the dashboard and APIs to read the subscriber and subscription records you need before
+cancellation or deletion. Enterprise customers can contact [support@airsignal.dev](mailto:support@airsignal.dev)
+if an Order Form requires assisted export.
+
+## Related
+
+- [Data collected by the SDK](/docs/privacy-and-security/data-collected-by-the-sdk)
+- [Unsubscribe API](/docs/api/users/unsubscribe)
+- [Privacy Policy](/privacy)

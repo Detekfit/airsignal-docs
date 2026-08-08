@@ -1,0 +1,68 @@
+---
+title: Data collected by the SDK
+description: Personal and device data the AirSignal SDKs and collect APIs may send to the platform.
+sidebarTitle: Data collected by the SDK
+---
+
+This page describes data that may be sent to AirSignal when you integrate the Flutter or Android
+SDK (or call the public collect `/v1` APIs directly). Your app may collect additional data that
+never reaches AirSignal.
+
+<Callout type="warning">
+  You are responsible for notices and consents shown to End Users. AirSignal processes this data as
+  your [processor](/docs/privacy-and-security/gdpr-compliance) under the [DPA](/dpa).
+</Callout>
+
+## Identity and profile
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `subscriberId` | No | AirSignal UUID if already known |
+| `subscriptionId` | No | Push subscription UUID |
+| `externalId` | No | Your user id (via login / profile flows) |
+| `email` / `name` / `phone` | No | Optional profile fields if you set them |
+| `country` | No | Optional country code if you provide it |
+| Tags / aliases | No | Key-value attributes you send for segmentation |
+
+## Push subscription and device
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `pushToken` | For push | Device push token |
+| `pushEnabled` / subscribed flags | No | Opt-in state for the push channel |
+| `device.platform` | Typical | `android`, `ios`, or `web` |
+| `device.model` | No | Device model string |
+| `device.os` | No | OS version string |
+| `device.appVersion` / `appVer` | No | Your app version |
+| `device.sdkVersion` / `sdkVer` | No | AirSignal SDK version |
+| `device.language` | No | Device language |
+| `device.timezone` | No | IANA timezone |
+
+## Session and activity
+
+| Event / field | Notes |
+| --- | --- |
+| Heartbeat / session start/end | Keeps presence and activity up to date |
+| Notification open / click events | Engagement analytics for messages you send |
+| App open (when instrumented) | Activity signal for usage metrics and charts |
+
+These events support delivery analytics and plan usage measurement in your dashboard. Retention
+follows your [plan](/pricing).
+
+## What we do **not** collect via the push SDK by default
+
+- Precise GPS coordinates
+- Contacts, photos, or microphone/camera data
+- End User payment card numbers
+- Advertising IDs (do not send them in tags unless you intentionally choose to)
+
+## Credentials (dashboard / API — not End User SDK)
+
+- Project API keys — keep send keys on your server only; never embed them in client apps
+- Push provider credentials you upload in app settings — stored securely by AirSignal
+
+## Related
+
+- [Handling personal data](/docs/privacy-and-security/handling-personal-data)
+- [Upsert subscriber API](/docs/api/users/upsert)
+- [Privacy Policy](/privacy)

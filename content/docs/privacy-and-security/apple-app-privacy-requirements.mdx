@@ -1,0 +1,44 @@
+---
+title: Apple App Privacy requirements
+description: Guidance for App Store privacy nutrition labels when your iOS app uses AirSignal push.
+sidebarTitle: Apple App Privacy
+---
+
+Apple requires App Privacy (“nutrition label”) disclosures. If your app uses AirSignal, disclose
+data that **your app** collects via the AirSignal SDK/API and any other SDKs you ship.
+
+<Callout type="warning">
+  AirSignal’s iOS SDK is on the roadmap. When you add iOS push, update labels to match the fields
+  you actually send. Until then, only declare data types you collect through other means.
+</Callout>
+
+## Typical AirSignal-related data types
+
+Use Apple’s categories that match your implementation. Common mappings when using AirSignal push:
+
+| You send via AirSignal | Often maps to (examples) |
+| --- | --- |
+| Push token / device identifiers | Device ID / Product Interaction |
+| `externalId`, email, name, phone | Contact Info / User ID (if you send them) |
+| Tags you define | Other Diagnostic / Product Interaction (depends on content) |
+| Coarse country / timezone | Coarse Location / Other Diagnostic Data |
+| Notification opens | Product Interaction |
+
+## Linked vs used for tracking
+
+- AirSignal uses End User data to deliver **your** notifications and show **you** analytics — not to
+  track users across third-party apps for AirSignal’s advertising.
+- If **you** use AirSignal tags or your own tools for cross-app tracking or third-party advertising,
+  you must disclose that separately.
+
+## Privacy policy URL
+
+Point App Store Connect at your app’s privacy policy (your company site). You may also link
+AirSignal’s [/privacy](/privacy) for processor disclosures.
+
+## Checklist
+
+1. Inventory fields you pass to AirSignal ([data collected](/docs/privacy-and-security/data-collected-by-the-sdk)).
+2. Mark each as linked to identity if you join it to an account.
+3. Do not claim AirSignal collects types you never send.
+4. Keep labels updated when you add profile fields or tags with personal data.

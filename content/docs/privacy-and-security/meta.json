@@ -1,0 +1,12 @@
+{
+  "title": "Privacy and security",
+  "pages": [
+    "index",
+    "data-collected-by-the-sdk",
+    "gdpr-compliance",
+    "handling-personal-data",
+    "apple-app-privacy-requirements",
+    "google-play-data-safety",
+    "data-questions"
+  ]
+}

@@ -1,0 +1,122 @@
+---
+title: GDPR compliance
+description: UK and EU/EEA GDPR processing roles, transfer approach, and a practical compliance plan for AirSignal push customers.
+sidebarTitle: GDPR compliance
+---
+
+This page explains how **UK GDPR** and **EU GDPR** (EEA) apply when you use AirSignal for push.
+It is practical guidance for Clients — **not legal advice**. For counsel-reviewed contracts, contact
+[legal@airsignal.dev](mailto:legal@airsignal.dev).
+
+Operator: **Detekfit Ltd** (United Kingdom). Policies: [Privacy](/privacy) · [DPA](/dpa) ·
+[Subprocessors](/subprocessors) · [Legal](/legal).
+
+## 1. Scope: UK and EU / EEA
+
+| Law | Typical relevance |
+| --- | --- |
+| **UK GDPR** + Data Protection Act 2018 | Detekfit Ltd is a UK company; many Clients and End Users are in the UK |
+| **EU GDPR** | Applies when you offer an app to people in the **EEA** or monitor their behaviour there |
+| **ePrivacy** (and UK PECR) | Push permission / device storage and access — you must get valid notice and consent where required |
+
+AirSignal’s [DPA](/dpa) is written to cover **UK GDPR and EU GDPR** processing of Customer Personal
+Data. Market-specific addenda can be agreed in an Enterprise Order Form.
+
+## 2. Roles
+
+| Data | Your role (Client) | AirSignal role |
+| --- | --- | --- |
+| End User / subscriber data in your AirSignal app | **Controller** (or processor for your users) | **Processor** — [DPA](/dpa) |
+| Your team’s dashboard accounts and billing | — | **Controller** — [Privacy](/privacy) |
+| Cookies on airsignal.dev | — | Controller — [Cookies](/cookies) |
+
+If you are an End User of a Client’s app, contact that app’s publisher first. We assist the Client
+under the DPA.
+
+## 3. What processing happens (push)
+
+High-level flow for EU/EEA and UK End Users:
+
+1. Your app or SDK registers a device / subscriber with AirSignal (collect APIs).  
+2. You (or your backend) create a notification and choose an audience.  
+3. AirSignal processes tokens and targeting data to deliver push (via Google FCM) and to show you
+   delivery / engagement analytics.  
+4. You remain responsible for the privacy notice, lawful basis, and End User rights for that app.
+
+**Categories we may process for you** (only what you send or the Service generates for delivery):
+identifiers (subscriber / subscription / push token), optional profile fields, device attributes,
+tags/aliases, activity and notification events, and notification content you submit.
+
+Details: [Data collected by the SDK](/docs/privacy-and-security/data-collected-by-the-sdk) ·
+[Privacy Policy](/privacy) § Client End Users.
+
+**We do not** decide your lawful basis, write your End User privacy policy, or replace your duty to
+obtain push permission.
+
+## 4. Lawful basis (your decision)
+
+Common patterns for push (confirm with your counsel):
+
+- **Consent** — device notification permission plus clear information (often required under ePrivacy /
+  PECR for non-essential storage/access).  
+- **Contract** — strictly necessary messages tied to a service the user requested.  
+- **Legitimate interests** — only where appropriate and balanced; often weaker for marketing push.
+
+Special-category data must not be sent to AirSignal unless agreed in writing and you have a valid
+condition under GDPR Article 9 / UK equivalent.
+
+## 5. International transfers
+
+When Customer Personal Data moves from the **UK or EEA** to a country without an adequacy decision,
+AirSignal uses a valid transfer tool as described in the [DPA](/dpa) (for example EU SCCs and/or
+UK IDTA / Addendum), unless another lawful basis applies.
+
+Vendors: [Subprocessors](/subprocessors). Hosting topology is not published publicly; Enterprise
+buyers may request details under NDA.
+
+## 6. Compliance plan for Clients (UK & EEA)
+
+Use this as a practical checklist before you go live in the UK or EEA:
+
+| Step | Action |
+| --- | --- |
+| 1 | Map what you send to AirSignal (fields, tags, events). |
+| 2 | Update your **app privacy policy** and store listings; name AirSignal as a push provider and link [Privacy](/privacy). |
+| 3 | Implement OS push permission and in-app notice / consent where required. |
+| 4 | Accept AirSignal [Terms](/terms) (DPA incorporated) or sign an Order Form + DPA for Enterprise. |
+| 5 | Set a process for End User rights (access / delete): use dashboard unsubscribe / delete; we assist under the DPA. |
+| 6 | Avoid Sensitive Information in tags or payloads. |
+| 7 | If you appoint an EU representative or DPO under GDPR, keep AirSignal contacts ready: [legal@airsignal.dev](mailto:legal@airsignal.dev). |
+| 8 | Re-check after major SDK or data-field changes. |
+
+Store form help: [Apple App Privacy](/docs/privacy-and-security/apple-app-privacy-requirements) ·
+[Google Play Data Safety](/docs/privacy-and-security/google-play-data-safety).
+
+## 7. Platform compliance plan (AirSignal)
+
+How we organise UK / EU-EEA readiness on our side:
+
+| Area | Approach |
+| --- | --- |
+| **Roles** | Processor for Client End User data; controller for Client accounts and our website — [Privacy](/privacy) |
+| **Contract** | [Terms](/terms) + [DPA](/dpa) + [AUP](/aup); Enterprise Order Forms when needed |
+| **UK solicitor review** | Terms, Privacy Policy, and DPA are maintained for UK-operated SaaS and EU/EEA Client use. We engage **UK counsel** experienced in UK GDPR and EU GDPR to review and update those documents for production markets. Contact [legal@airsignal.dev](mailto:legal@airsignal.dev) for the current counsel-reviewed pack or signed DPA execution. |
+| **Transfers** | SCCs / UK IDTA (or adequacy) as in the DPA |
+| **Subprocessors** | Listed and updated at [Subprocessors](/subprocessors) |
+| **Rights & breaches** | Assist Controllers under the DPA; notify without undue delay after a relevant Personal Data Breach |
+| **Website** | Cookie consent on airsignal.dev — [Cookies](/cookies) |
+| **Product** | Soft unsubscribe via API; hard delete in dashboard — [Handling personal data](/docs/privacy-and-security/handling-personal-data) |
+
+## 8. Security (summary)
+
+High-level questionnaire answers: [Data questions](/docs/privacy-and-security/data-questions).  
+Contractual security: [DPA](/dpa) Annex B. Detailed controls for Enterprise procurement: under NDA via
+[sales@airsignal.dev](mailto:sales@airsignal.dev).
+
+## 9. Contacts
+
+| Need | Contact |
+| --- | --- |
+| Privacy / DPA / solicitor-reviewed docs | [legal@airsignal.dev](mailto:legal@airsignal.dev) |
+| Product support | [support@airsignal.dev](mailto:support@airsignal.dev) |
+| Enterprise agreements | [sales@airsignal.dev](mailto:sales@airsignal.dev) |

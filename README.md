@@ -1,7 +1,7 @@
 # airsignal-docs
 
 Source content for [airsignal.dev/docs](https://airsignal.dev/docs) and marketing legal pages
-(`/terms`, `/privacy`, `/refunds`). This repo is public and read directly by the AirSignal web app
+(`/terms`, `/privacy`, `/cookies`, `/dpa`, …). This repo is public and read directly by the AirSignal web app
 (`apps/web`) over the GitHub API — pushing to `main` updates the live site within ~2 minutes (ISR),
 no deploy required.
 
@@ -22,11 +22,17 @@ content/
       analytics/
     sdks/
       flutter.mdx         # full Flutter SDK guide (single page)
-  legal/                  # marketing legal pages → /terms /privacy /refunds
+    privacy-and-security/ # GDPR, SDK data, store forms
+  legal/                  # marketing legal pages
     meta.json
     terms.mdx             # → /terms
+    aup.mdx               # → /aup
     privacy.mdx           # → /privacy
+    cookies.mdx           # → /cookies
     refunds.mdx           # → /refunds
+    dpa.mdx               # → /dpa
+    subprocessors.mdx     # → /subprocessors
+    enterprise-sla.mdx    # → /enterprise-sla
 assets/                   # images; use /assets/... paths in MDX (resolved via jsDelivr CDN)
 ```
 
@@ -35,9 +41,15 @@ assets/                   # images; use /assets/... paths in MDX (resolved via j
 | Content path | Public URL |
 |---|---|
 | `content/docs/{path}` | `/docs/{path}` (`index.mdx` maps to the folder URL) |
+| *(hub in `apps/web`, not MDX)* | `/legal` — maps all policies |
 | `content/legal/terms.mdx` | `/terms` |
+| `content/legal/aup.mdx` | `/aup` |
 | `content/legal/privacy.mdx` | `/privacy` |
+| `content/legal/cookies.mdx` | `/cookies` |
 | `content/legal/refunds.mdx` | `/refunds` |
+| `content/legal/dpa.mdx` | `/dpa` |
+| `content/legal/subprocessors.mdx` | `/subprocessors` |
+| `content/legal/enterprise-sla.mdx` | `/enterprise-sla` |
 
 ## Adding a docs page
 
@@ -58,7 +70,7 @@ assets/                   # images; use /assets/... paths in MDX (resolved via j
 
 ## Editing legal pages
 
-Edit `content/legal/{terms|privacy|refunds}.mdx`. Frontmatter fields:
+Edit `content/legal/{slug}.mdx` (see list above). Frontmatter fields:
 
 ```mdx
 ---
