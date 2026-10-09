@@ -114,7 +114,15 @@ curl -X POST 'https://api.airsignal.dev/v1/subscribers' \
 </RequestParam>
 
 <RequestParam name="pushToken" type="String">
-  FCM / APNs push token for this device.
+  FCM / APNs push token for this device. For web push, the browser `PushSubscription.endpoint`.
+</RequestParam>
+
+<RequestParam name="webP256dh" type="String">
+  Web push only. Base64url `p256dh` key from the browser push subscription.
+</RequestParam>
+
+<RequestParam name="webAuth" type="String">
+  Web push only. Base64url `auth` secret from the browser push subscription.
 </RequestParam>
 
 <RequestParam name="pushEnabled" type="Boolean">
@@ -135,4 +143,10 @@ curl -X POST 'https://api.airsignal.dev/v1/subscribers' \
 
 <Callout type="tip">
   `subscriptionId` is SDK-internal. Use `subscriberId` or `externalId` when targeting sends.
+</Callout>
+
+<Callout type="info">
+  Web push requests (`device.platform: "web"`, `webP256dh`, or `webAuth`) are only accepted from
+  the site URL set on the app's Web platform. Otherwise the API returns `403` `originMismatch`
+  (or `webNotConfigured` when Web is not set up).
 </Callout>

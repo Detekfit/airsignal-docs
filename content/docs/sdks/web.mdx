@@ -1,0 +1,117 @@
+---
+title: Web SDK
+description: Web push for any site. Add the AirSignal script and initialize with your app id.
+sidebarTitle: Web
+---
+
+The Web SDK is loaded from `https://cdn.airsignal.dev/airsignal.js`. After the page loads it shows
+a prompt. Subscribe opens the browser permission dialog.
+
+<Callout type="warning">
+  Save the **Site URL** on the app's Web platform page first (for example `https://example.com`).
+  The site must be served over https. `http://localhost` works for local testing.
+</Callout>
+
+## Installation
+
+Paste this exact block in the `<head>` of every page. Replace only `YOUR_APP_ID` with the public app id from the app settings page. Leave the script address as `https://cdn.airsignal.dev/airsignal.js`.
+
+```html
+<script src="https://cdn.airsignal.dev/airsignal.js" defer></script>
+<script>
+  window.AirSignalDeferred = window.AirSignalDeferred || [];
+  AirSignalDeferred.push(function (AirSignal) {
+    AirSignal.init({ appId: "YOUR_APP_ID" });
+  });
+</script>
+```
+
+The **Site URL** on the Web platform page must be the exact site origin, such as `https://example.com`. A different host, or a path after the host, will not subscribe.
+
+## Initialization
+
+`init` shows a prompt after the page loads. Cancel hides it in this browser only. Subscribe opens the browser permission dialog.
+
+| Argument | Default | Purpose |
+|---|---|---|
+| `appId` | required | Public app id from the dashboard |
+
+To ask from your own button, call `requestPermission()` on click:
+
+```html
+<script>
+  AirSignalDeferred.push(function (AirSignal) {
+    AirSignal.init({ appId: "YOUR_APP_ID" });
+  });
+</script>
+<button onclick="AirSignalDeferred.push(function (s) { s.requestPermission(); })">
+  Enable notifications
+</button>
+```
+
+```js
+AirSignalDeferred.push(async function (AirSignal) {
+  const status = AirSignal.getPermission();
+  // "default" | "granted" | "denied" | "unsupported"
+  const subscriberId = AirSignal.getSubscriberId();
+});
+```
+
+Persist `subscriberId` if you target sends by id from your backend. See [Users](/docs/api/users).
+
+## Identity
+
+A new browser starts **anonymous**. Call `login` after your own sign-in completes.
+
+### Login
+
+```js
+AirSignalDeferred.push(async function (AirSignal) {
+  await AirSignal.login("user_123");
+});
+```
+
+Attaches this browser's push subscription to the subscriber for that `externalId`, creating the
+account if it does not exist yet.
+
+### Logout
+
+```js
+AirSignalDeferred.push(async function (AirSignal) {
+  await AirSignal.logout();
+});
+```
+
+Moves this browser to a new anonymous subscriber. The identified account is kept. Logout does
+**not** stop push.
+
+<Callout type="warning">
+  `login` / `logout` change which account this browser belongs to. To stop push, use
+  [optOut](#opting-in--out).
+</Callout>
+
+### Tags
+
+```js
+AirSignalDeferred.push(async function (AirSignal) {
+  await AirSignal.setTags({ plan: "pro", cohort: "beta" });
+  await AirSignal.removeTags(["cohort"]);
+});
+```
+
+## Opting in / out
+
+```js
+AirSignalDeferred.push(async function (AirSignal) {
+  await AirSignal.optOut();
+  await AirSignal.optIn();
+});
+```
+
+`optOut` stops push for this browser only. It does not change email subscription. Logout does
+**not** call `optOut`.
+
+<Callout type="info">
+  A click is reported automatically. Dashboard **Delivered** counts come from the push service
+  accepting the send, not from the page.
+</Callout>
