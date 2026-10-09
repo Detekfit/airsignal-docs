@@ -4,20 +4,45 @@ description: Web push for any site. Add the AirSignal script and initialize with
 sidebarTitle: Web
 ---
 
-The Web SDK is loaded from `https://cdn.airsignal.dev/airsignal.js`. After the page loads it shows
-a prompt. Subscribe opens the browser permission dialog.
+The Web SDK is loaded from `https://cdn.airsignal.dev/sdks/web/v1/airsignal.js`. After the page loads it shows
+a card on your page. Subscribe opens the browser permission dialog.
 
 <Callout type="warning">
   Save the **Site URL** on the app's Web platform page first (for example `https://example.com`).
-  The site must be served over https. `http://localhost` works for local testing.
+  It must be the exact origin: `https://www.example.com` and `https://example.com` are different
+  sites. The site must be served over https. `http://localhost` works for local testing.
 </Callout>
 
 ## Installation
 
-Paste this exact block in the `<head>` of every page. Replace only `YOUR_APP_ID` with the public app id from the app settings page. Leave the script address as `https://cdn.airsignal.dev/airsignal.js`.
+Pick **one** option on the app's Web platform page. A site uses one option, not both.
+
+### Option 1 — Your own site
+
+Use this when you can upload a file to your site root.
+
+1. Download `AirSignalSDK.js` from the app's Web platform page and upload it at your site root,
+   so it opens at `https://example.com/AirSignalSDK.js`.
+2. Paste the head script below on every page.
+
+The browser asks for permission on your own site.
+
+### Option 2 — Blogger or sites without file upload
+
+Use this when you cannot upload files (Blogger, some site builders). Paste the head script below
+on every page. Nothing to upload, and no DNS to set up.
+
+Subscribe opens a small window on your app's push address, for example
+`https://0123456789abcdef0123456789abcdef.push.airsignal.dev`, which the dashboard shows. The browser asks for
+permission for that address. Each app gets its own push address.
+
+### Head script
+
+Paste this exact block in the `<head>`. Replace only `YOUR_APP_ID` with the public app id from the
+app settings page. Leave the script address as `https://cdn.airsignal.dev/sdks/web/v1/airsignal.js`.
 
 ```html
-<script src="https://cdn.airsignal.dev/airsignal.js" defer></script>
+<script src="https://cdn.airsignal.dev/sdks/web/v1/airsignal.js" defer></script>
 <script>
   window.AirSignalDeferred = window.AirSignalDeferred || [];
   AirSignalDeferred.push(function (AirSignal) {
@@ -26,15 +51,15 @@ Paste this exact block in the `<head>` of every page. Replace only `YOUR_APP_ID`
 </script>
 ```
 
-The **Site URL** on the Web platform page must be the exact site origin, such as `https://example.com`. A different host, or a path after the host, will not subscribe.
-
 ## Initialization
 
-`init` shows a prompt after the page loads. Cancel hides it in this browser only. Subscribe opens the browser permission dialog.
+`init` shows the card after the page loads. Cancel hides it in this browser only. Subscribe opens
+the browser permission dialog.
 
 | Argument | Default | Purpose |
 |---|---|---|
 | `appId` | required | Public app id from the dashboard |
+| `autoPrompt` | `true` | Set `false` to show nothing until you call `requestPermission()` |
 
 To ask from your own button, call `requestPermission()` on click:
 
