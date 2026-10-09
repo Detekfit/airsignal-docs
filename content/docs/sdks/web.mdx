@@ -1,74 +1,50 @@
 ---
 title: Web SDK
-description: Web push for any site. Add the AirSignal script and initialize with your app id.
+description: Add AirSignal to a website. Upload AirSignalSDK.js and paste the head script.
 sidebarTitle: Web
 ---
 
-The Web SDK is loaded from `https://cdn.airsignal.dev/sdks/web/v1/airsignal.js`. After the page loads it shows
-a card on your page. Subscribe opens the browser permission dialog.
+Save the site URL on the app's Web platform page, then add the worker and the head script on that site.
 
 <Callout type="warning">
-  Save the **Site URL** on the app's Web platform page first (for example `https://example.com`).
-  It must be the exact origin: `https://www.example.com` and `https://example.com` are different
-  sites. The site must be served over https. `http://localhost` works for local testing.
+  The site URL is an exact https origin. `https://www.example.com` and `https://example.com` are different sites. `http://localhost` works for local testing.
 </Callout>
 
-## Installation
+## Setup
 
-Pick **one** option on the app's Web platform page. A site uses one option, not both.
+<Steps>
+  <Step title="Upload the worker">
+    Download `AirSignalSDK.js` and put it at the site root. It must open at `https://example.com/AirSignalSDK.js`.
 
-### Option 1 — Your own site
+    <DownloadAirSignalSdk />
+  </Step>
+  <Step title="Add the script">
+    Paste this in `<head>` on every page. Replace `YOUR_APP_ID` with the public app id from app settings. Leave the script URL as written.
 
-Use this when you can upload a file to your site root.
+    ```html
+    <script src="https://cdn.airsignal.dev/sdks/web/v1/airsignal.js" defer></script>
+    <script>
+      window.AirSignalDeferred = window.AirSignalDeferred || [];
+      AirSignalDeferred.push(function (AirSignal) {
+        AirSignal.init({ appId: "YOUR_APP_ID" });
+      });
+    </script>
+    ```
+  </Step>
+</Steps>
 
-1. Download `AirSignalSDK.js` from the app's Web platform page and upload it at your site root,
-   so it opens at `https://example.com/AirSignalSDK.js`.
-2. Paste the head script below on every page.
+A site that cannot host a file at `/AirSignalSDK.js` (for example Blogger) cannot receive web push.
 
-The browser asks for permission on your own site.
-
-### Option 2 — Blogger or sites without file upload
-
-Use this when you cannot upload files (Blogger, some site builders). Paste the head script below
-on every page. Nothing to upload, and no DNS to set up.
-
-Subscribe opens a small window on your app's push address, for example
-`https://0123456789abcdef0123456789abcdef.airsignal.top`, which the dashboard shows. The browser asks for
-permission for that address. Each app gets its own push address.
-
-### Head script
-
-Paste this exact block in the `<head>`. Replace only `YOUR_APP_ID` with the public app id from the
-app settings page. Leave the script address as `https://cdn.airsignal.dev/sdks/web/v1/airsignal.js`.
-
-```html
-<script src="https://cdn.airsignal.dev/sdks/web/v1/airsignal.js" defer></script>
-<script>
-  window.AirSignalDeferred = window.AirSignalDeferred || [];
-  AirSignalDeferred.push(function (AirSignal) {
-    AirSignal.init({ appId: "YOUR_APP_ID" });
-  });
-</script>
-```
+After the page loads, the SDK shows a subscribe card. Subscribe opens the browser permission dialog on that origin.
 
 ## Initialization
-
-`init` shows the card after the page loads. Cancel hides it in this browser only. Subscribe opens
-the browser permission dialog.
 
 | Argument | Default | Purpose |
 |---|---|---|
 | `appId` | required | Public app id from the dashboard |
-| `autoPrompt` | `true` | Set `false` to show nothing until you call `requestPermission()` |
-
-To ask from your own button, call `requestPermission()` on click:
+| `autoPrompt` | `true` | Set `false` and call `requestPermission()` from your own button |
 
 ```html
-<script>
-  AirSignalDeferred.push(function (AirSignal) {
-    AirSignal.init({ appId: "YOUR_APP_ID" });
-  });
-</script>
 <button onclick="AirSignalDeferred.push(function (s) { s.requestPermission(); })">
   Enable notifications
 </button>
@@ -77,18 +53,15 @@ To ask from your own button, call `requestPermission()` on click:
 ```js
 AirSignalDeferred.push(async function (AirSignal) {
   const status = AirSignal.getPermission();
-  // "default" | "granted" | "denied" | "unsupported"
   const subscriberId = AirSignal.getSubscriberId();
 });
 ```
 
-Persist `subscriberId` if you target sends by id from your backend. See [Users](/docs/api/users).
+`getPermission()` is `"default"`, `"granted"`, `"denied"`, or `"unsupported"`. Keep `subscriberId` if you send to that user from your backend. See [Users](/docs/api/users).
 
 ## Identity
 
-A new browser starts **anonymous**. Call `login` after your own sign-in completes.
-
-### Login
+A new browser is anonymous. Call `login` after your own sign-in.
 
 ```js
 AirSignalDeferred.push(async function (AirSignal) {
@@ -96,10 +69,7 @@ AirSignalDeferred.push(async function (AirSignal) {
 });
 ```
 
-Attaches this browser's push subscription to the subscriber for that `externalId`, creating the
-account if it does not exist yet.
-
-### Logout
+`login` attaches this browser to that `externalId` and creates the subscriber if needed.
 
 ```js
 AirSignalDeferred.push(async function (AirSignal) {
@@ -107,15 +77,7 @@ AirSignalDeferred.push(async function (AirSignal) {
 });
 ```
 
-Moves this browser to a new anonymous subscriber. The identified account is kept. Logout does
-**not** stop push.
-
-<Callout type="warning">
-  `login` / `logout` change which account this browser belongs to. To stop push, use
-  [optOut](#opting-in--out).
-</Callout>
-
-### Tags
+`logout` moves this browser to a new anonymous subscriber and keeps the identified account. It does not stop push.
 
 ```js
 AirSignalDeferred.push(async function (AirSignal) {
@@ -133,10 +95,4 @@ AirSignalDeferred.push(async function (AirSignal) {
 });
 ```
 
-`optOut` stops push for this browser only. It does not change email subscription. Logout does
-**not** call `optOut`.
-
-<Callout type="info">
-  A click is reported automatically. Dashboard **Delivered** counts come from the push service
-  accepting the send, not from the page.
-</Callout>
+`optOut` stops push for this browser. It does not change email subscription. A notification click is reported automatically.

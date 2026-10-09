@@ -147,7 +147,6 @@ curl -X POST 'https://api.airsignal.dev/v1/subscribers' \
 
 <Callout type="info">
   Web push requests (`device.platform: "web"`, `webP256dh`, or `webAuth`) are only accepted from
-  one origin. With install Option 1 it is the site URL set on the app's Web platform. With
-  Option 2 it is the app's AirSignal push address. Any other origin gets `403` `originMismatch`.
+  the site URL set on the app's Web platform. Any other origin gets `403` `originMismatch`.
   `403` `webNotConfigured` means Web is not set up or is turned off.
 </Callout>
