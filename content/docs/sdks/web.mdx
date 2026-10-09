@@ -7,7 +7,7 @@ sidebarTitle: Web
 Save the site URL on the app's Web platform page, then add the worker and the head script on that site.
 
 <Callout type="warning">
-  The site URL is an exact https origin. `https://www.example.com` and `https://example.com` are different sites. `http://localhost` works for local testing.
+  Saving `https://example.com` also accepts `https://www.example.com`, and the reverse. No other host is accepted. Upload `AirSignalSDK.js` on each host that serves pages. A host that only redirects does not need the file. `http://localhost` works for local testing.
 </Callout>
 
 ## Setup
@@ -35,7 +35,9 @@ Save the site URL on the app's Web platform page, then add the worker and the he
 
 A site that cannot host a file at `/AirSignalSDK.js` (for example Blogger) cannot receive web push.
 
-After the page loads, the SDK shows a subscribe card. Subscribe opens the browser permission dialog on that origin.
+After the page loads, the SDK shows a subscribe card. Subscribe opens the browser permission dialog on that origin. The first visit creates one unsubscribed user. Allow subscribes that same user. Later visits update it and do not create another.
+
+The small icon on a notification is the Default icon URL from the Web platform. Leave it empty and the notification has no small icon. The large picture is the image attached to that push. Chrome and Edge show it. Firefox and Safari show the title, body, and the small icon when one is set.
 
 ## Initialization
 
