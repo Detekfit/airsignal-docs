@@ -1,0 +1,53 @@
+---
+title: WordPress
+description: Install the AirSignal plugin, connect your App ID and API key, and send when posts or pages are published.
+sidebarTitle: WordPress
+---
+
+The WordPress plugin shows the permission prompt on your site and can send a push when you publish or update a post or page.
+
+Use HTTPS on the main site address, such as `https://example.com`. A WordPress install in a subfolder (`https://example.com/blog/`) is not supported.
+
+Configure [Web](/docs/guides/web) on your app first and copy the App ID. In **Settings**, also copy the API key (`nsk_...`). See [API keys](/docs/guides/api-keys).
+
+## Install
+
+<Steps>
+  <Step title="Upload the plugin">
+    Download the plugin and upload it in WordPress under **Plugins → Add New → Upload Plugin**.
+
+    <DownloadWordPressPlugin />
+  </Step>
+  <Step title="Activate">
+    Activate **AirSignal Web Push**, then open **AirSignal** in the admin menu.
+  </Step>
+  <Step title="Connect">
+    Paste the App ID and API key. Each field saves itself when the value is valid — there is no save button.
+
+    A green check means it was saved. A saved API key stays hidden (`nsk_**********`) with that green check. A gray dash means nothing is stored yet. A red cross means the value does not match, so it was not saved. The red note under the field says why. Click the hidden key and paste a new one to replace it.
+  </Step>
+</Steps>
+
+You do not add the script or upload a worker file yourself. The permission banner is controlled from the AirSignal dashboard.
+
+## Automatic notifications
+
+Turn on the options you want. They save as soon as you change them. **Priority** saves the same way. Each send goes to everyone subscribed on that app.
+
+| Option | When it sends |
+|---|---|
+| Automatically send notifications when a post is published | A post is published from the WordPress editor |
+| Automatically send notifications when a post is updated | A published post is saved again |
+| Automatically send notifications when a page is published | A page is published |
+| Automatically send notifications when a page is updated | A published page is saved again |
+| Automatically send a push notification when I publish a post from 3rd party plugins | A post is published by another plugin or an import |
+
+Drafts do not send. The notification uses your site name, the post or page title, and the page link. A featured image is included when one is set. **Notification priority** can be **Normal** or **High**. The default is Normal.
+
+## Check that it works
+
+1. Open your site and allow notifications.
+2. Publish a post.
+3. Confirm the push arrives with the title and link.
+
+If the prompt does not appear, the site URL in AirSignal must match the address in the browser.

@@ -1,0 +1,37 @@
+---
+title: Web
+description: Configure Web on your app, then add the Web SDK or the WordPress plugin.
+sidebarTitle: Web
+---
+
+The first time you set up an app, you can choose **Web**. You can add Android on the same app later. One notification can reach web and Android subscribers together.
+
+<Steps>
+  <Step title="Open the dashboard">
+    Go to [airsignal.dev/dashboard](https://airsignal.dev/dashboard) and select your organization.
+  </Step>
+  <Step title="Choose Web">
+    Click **New app** and choose **Web**. If you already have an app, open it and configure Web there.
+  </Step>
+  <Step title="Set the site URL">
+    Enter the address visitors use, including `https://`, such as `https://example.com`. `www` and the bare host count as the same site.
+  </Step>
+  <Step title="Copy the App ID">
+    Copy the App ID (`app_...`) from the install screen.
+  </Step>
+</Steps>
+
+Then follow how the site is built:
+
+<Cards>
+  <Card title="Web SDK" href="/docs/sdks/web" icon="Web">
+    Upload the worker and add the script yourself.
+  </Card>
+  <Card title="WordPress" href="/docs/sdks/wordpress" icon="Globe">
+    Install the plugin and paste the App ID.
+  </Card>
+</Cards>
+
+<Callout type="tip">
+  WordPress needs a project API key to send when you publish. See [API keys](/docs/guides/api-keys). To add Android on this same app, follow [Android](/docs/guides/android).
+</Callout>

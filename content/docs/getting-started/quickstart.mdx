@@ -3,12 +3,11 @@ title: Quickstart
 description: Send your first push with the AirSignal REST API — create an app, register a device, and deliver via FCM.
 ---
 
+This quickstart uses Android. For a website, configure [Web](/docs/guides/web), then follow the [Web SDK](/docs/sdks/web) or [WordPress](/docs/sdks/wordpress). The same app can reach both.
+
 <Steps>
-  <Step title="Create an app">
-    In the [dashboard](https://airsignal.dev/dashboard), create a new app, choose **Google push
-    (Messaging)** as the platform, and upload a Google service account JSON — see
-    [Get a Google service account JSON](/docs/guides/service-account) if you don't have one yet.
-    You'll get a public `appId` (`app_...`).
+  <Step title="Create an Android app">
+    Follow [Android](/docs/guides/android). You will get a public `appId` (`app_...`).
   </Step>
   <Step title="Register a device">
     Call the collect API with your `appId` to register a subscriber and push token:
@@ -44,17 +43,19 @@ description: Send your first push with the AirSignal REST API — create an app,
 </Steps>
 
 <Callout type="info">
-  Building a Flutter app? The [Flutter SDK](/docs/sdks/flutter) wraps steps 1–2 for you — no
-  Firebase Messaging wiring needed in your app.
+  The [Android SDK](/docs/sdks/android) and [Flutter SDK](/docs/sdks/flutter) register the device for you. You still send with the REST key.
 </Callout>
 
 ## Next steps
 
 <Cards>
-  <Card title="API Reference" href="/docs/api" icon="Code">
-    Full collect and send endpoint catalog.
+  <Card title="Android SDK" href="/docs/sdks/android" icon="Android">
+    Install the official library.
   </Card>
   <Card title="Flutter SDK" href="/docs/sdks/flutter" icon="Flutter">
     Install the official package.
+  </Card>
+  <Card title="Web" href="/docs/guides/web" icon="Globe">
+    Configure Web on the same app.
   </Card>
 </Cards>

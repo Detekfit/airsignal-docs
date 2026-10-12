@@ -4,7 +4,7 @@ description: Add AirSignal to a website. Upload AirSignalSDK.js and paste the he
 sidebarTitle: Web
 ---
 
-Save the site URL on the app's Web platform page, then add the worker and the head script on that site.
+Configure [Web](/docs/guides/web) on your app first, then add the worker and the head script on that site. WordPress sites should use the [plugin](/docs/sdks/wordpress) instead of this page.
 
 <Callout type="warning">
   Saving `https://example.com` also accepts `https://www.example.com`, and the reverse. No other host is accepted. Upload `AirSignalSDK.js` on each host that serves pages. A host that only redirects does not need the file. `http://localhost` works for local testing.
@@ -33,7 +33,7 @@ Save the site URL on the app's Web platform page, then add the worker and the he
   </Step>
 </Steps>
 
-A site that cannot host a file at `/AirSignalSDK.js` (for example Blogger) cannot receive web push.
+A site that cannot host a file at `/AirSignalSDK.js` (for example Blogger) cannot receive web push. On WordPress, use the [WordPress plugin](/docs/sdks/wordpress).
 
 After the page loads, the SDK shows a subscribe card. Subscribe opens the browser permission dialog on that origin. The first visit creates one unsubscribed user. Allow subscribes that same user. Later visits update it and do not create another.
 

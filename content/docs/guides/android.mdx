@@ -1,0 +1,37 @@
+---
+title: Android
+description: Configure Android on your app, then install the Android or Flutter SDK.
+sidebarTitle: Android
+---
+
+The first time you set up an app, choose **Android**. You can add Web on the same app later. One notification can reach Android and web subscribers together.
+
+<Steps>
+  <Step title="Open the dashboard">
+    Go to [airsignal.dev/dashboard](https://airsignal.dev/dashboard) and select your organization.
+  </Step>
+  <Step title="Choose Android">
+    Click **New app**, choose **Android**, and name the app. Use this for native Android and Flutter.
+  </Step>
+  <Step title="Upload the service account">
+    Upload a Google service account JSON so AirSignal can send through FCM. See [Get a Google service account JSON](/docs/guides/service-account) if you need to create one.
+  </Step>
+  <Step title="Copy the App ID">
+    Copy the App ID (`app_...`). Paste it into the SDK.
+  </Step>
+</Steps>
+
+Then follow the SDK you use:
+
+<Cards>
+  <Card title="Android SDK" href="/docs/sdks/android" icon="Android">
+    Add the library and initialize with your App ID.
+  </Card>
+  <Card title="Flutter SDK" href="/docs/sdks/flutter" icon="Flutter">
+    Add the package and initialize with your App ID.
+  </Card>
+</Cards>
+
+<Callout type="tip">
+  A project REST key (`nsk_...`) is for sending from your server. See [API keys](/docs/guides/api-keys). To add a website on this same app, follow [Web](/docs/guides/web).
+</Callout>
