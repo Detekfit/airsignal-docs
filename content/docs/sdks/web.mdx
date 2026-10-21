@@ -37,6 +37,8 @@ A site that cannot host a file at `/AirSignalSDK.js` (for example Blogger) canno
 
 After the page loads, the SDK shows a subscribe card. Subscribe opens the browser permission dialog on that origin. The first visit creates one unsubscribed user. Allow subscribes that same user. Later visits update it and do not create another.
 
+If the Web platform has tags, those names appear as checkboxes under the card text, checked by default. The visitor can clear any of them. Each name left checked is saved on that subscriber as a tag with value `true`, so a segment can target it. With no tags, the card has no checkboxes and the subscribe saves no tags.
+
 The small icon on a notification is the Default icon URL from the Web platform. Leave it empty and the notification has no small icon. The large picture is the image attached to that push. Chrome and Edge show it. Firefox and Safari show the title, body, and the small icon when one is set.
 
 ## Initialization
